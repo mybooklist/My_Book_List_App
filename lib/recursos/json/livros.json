@@ -1,0 +1,184 @@
+{
+    "livros": [
+        {
+            "_id": 1,
+            "titulo": "Pachinko",
+            "autor": "Min Jin Lee",
+            "genero_literario": "Literatura Estrangeira",
+            "numero_paginas": "528",
+            "ano_publicacao": "2020",
+            "avaliacao": 5,
+            "status": "Lido",
+            "inicio_leitura": "21-12-2024",
+            "fim_leitura": "22-02-2025",
+            "resenha": "Um livro muito bom, achei a leitura muito intensa e cheia de significados. Quando vejo os momentos de dificuldade da Sunja e de sua família penso como esses tempos eram difíceis para todos mas ela teve realmente uma má sorte. Gostei muito do livro."
+
+        },
+        {
+            "_id": 2,
+            "titulo": "O Massacre da Família Hope",
+            "autor": "Riley Sager",
+            "genero_literario": "Suspense e Mistério",
+            "numero_paginas": "400",
+            "ano_publicacao": "2024",
+            "avaliacao": 4.5,
+            "status": "Lido",
+            "imagem": " ",
+            "inicio_leitura": "18-04-2025",
+            "fim_leitura": "18-05-2025",
+            "resenha": " "
+
+        },
+        {
+            "_id": 3,
+            "titulo": "No Meio da Noite",
+            "autor": "Riley Sager",
+            "genero_literario": "Suspense e Mistério",
+            "numero_paginas": "369",
+            "ano_publicacao": "2025",
+            "avaliacao": 3.5,
+            "status": "Lido",
+            "imagem": " ",
+            "inicio_leitura": "22-08-2025",
+            "fim_leitura": "30-08-2025",
+            "resenha": " "
+
+        },
+        {
+            "_id": 4,
+            "titulo": "Atos Humanos",
+            "autor": "Han Kang",
+            "genero_literario": "Literatura Estrangeira",
+            "numero_paginas": "192",
+            "ano_publicacao": "2021",
+            "avaliacao": 5,
+            "status": "Lido",
+            "imagem": " ",
+            "inicio_leitura": "10-12-2024",
+            "fim_leitura": "11-02-2024",
+            "resenha": " "
+
+        },
+        {
+            "_id": 5,
+            "titulo": "O Livro Branco",
+            "autor": "Han Kang",
+            "genero_literario": "Literatura Estrangeira",
+            "numero_paginas": "160",
+            "ano_publicacao": "2023",
+            "avaliacao": 5,
+            "status": "Lido",
+            "imagem": " ",
+            "inicio_leitura": "05-03-2025",
+            "fim_leitura": "04-04-2025",
+            "resenha": " "
+
+        },
+        {
+            "_id": 6,
+            "titulo": "O Homem de Giz",
+            "autor": "C.J.Tudor",
+            "genero_literario": "Crime e Investigação",
+            "numero_paginas": "320",
+            "ano_publicacao": "2018",
+            "avaliacao": 3.5,
+            "status": "Lido",
+            "imagem": " ",
+            "inicio_leitura": "12-07-2024",
+            "fim_leitura": "21-07-2024",
+            "resenha": " "
+
+        },
+        {
+            "_id": 7,
+            "titulo": "A Empregada",
+            "autor": "Freida McFadden",
+            "genero_literario": "Suspense e Mistério",
+            "numero_paginas": "304",
+            "ano_publicacao": "2023",
+            "avaliacao": null,
+            "status": "Lendo",
+            "imagem": " ",
+            "inicio_leitura": null,
+            "fim_leitura": null,
+            "resenha": null
+
+        },
+        {
+            "_id": 8,
+            "titulo": "A Sociedade do Anel",
+            "autor": "J.J.R Tolkien",
+            "genero_literario": "Fantasia",
+            "numero_paginas": "604",
+            "ano_publicacao": "2019",
+            "avaliacao": null,
+            "status": "Lendo",
+            "imagem": " ",
+            "inicio_leitura": null,
+            "fim_leitura": null,
+            "resenha": null
+
+        },
+        {
+            "_id": 9,
+            "titulo": "Como Tigres na Neve",
+            "autor": "Juhea Kim",
+            "genero_literario": "Ficção e História",
+            "numero_paginas": "344",
+            "ano_publicacao": "2022",
+            "avaliacao": null,
+            "status": "Quero ler",
+            "imagem": " ",
+            "inicio_leitura": null,
+            "fim_leitura": null,
+            "resenha": null
+
+        },
+        {
+            "_id": 10,
+            "titulo": "Dragões de Éter",
+            "autor": "Raphael Draccon",
+            "genero_literario": "Fantasia e Aventura",
+            "numero_paginas": "368",
+            "ano_publicacao": "2020",
+            "avaliacao": null,
+            "status": "Quero ler",
+            "imagem": " ",
+            "inicio_leitura": null,
+            "fim_leitura": null,
+            "resenha": null
+
+        },
+        {
+            "_id": 11,
+            "titulo": "Orgulho e Preconceito",
+            "autor": "Jane Austen",
+            "genero_literario": "Romance",
+            "numero_paginas": "424",
+            "ano_publicacao": "2018",
+            "avaliacao": 5,
+            "status": "Lido",
+            "imagem": " ",
+            "inicio_leitura": "28-07-2022",
+            "fim_leitura": "19-08-2022",
+            "resenha": " "
+
+        },
+        {
+            "_id": 12,
+            "titulo": "Amor, teoricamente",
+            "autor": "Ali Hazelwood",
+            "genero_literario": "Romance",
+            "numero_paginas": "368",
+            "ano_publicacao": "2023",
+            "avaliacao": 5,
+            "status": "Lido",
+            "imagem": " ",
+            "inicio_leitura": "12-05-2024",
+            "fim_leitura": "21-05-2024",
+            "resenha": " "
+
+        }
+
+    ]
+}
