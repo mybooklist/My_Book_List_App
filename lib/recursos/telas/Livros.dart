@@ -70,10 +70,10 @@ class _LivrosState extends State<Livros> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildFilterChip('Todos', Icons.list),
-                _buildFilterChip('Lido', Icons.check),
-                _buildFilterChip('Lendo', Icons.book),
-                _buildFilterChip('Quero ler', Icons.bookmark_border),
+                _buildFilterChip('Todos', Icons.article_rounded),
+                _buildFilterChip('Lido', Icons.book_rounded),
+                _buildFilterChip('Lendo', Icons.auto_stories_rounded),
+                _buildFilterChip('Quero ler', Icons.bookmark_rounded),
               ],
             ),
           ),
@@ -131,7 +131,7 @@ class _LivrosState extends State<Livros> {
     avatar: Icon(
       icon,
       size: 20,
-      color: selectedFilter == label ? Colors.white : Colors.black,
+      color: selectedFilter == label ? Colors.white : AppColors.accent,
     ),
     label: Text(
       label,
