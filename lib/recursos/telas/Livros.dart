@@ -103,7 +103,7 @@ class _LivrosState extends State<Livros> {
                           titulo: livro['titulo'],
                           autor: livro['autor'],
                           status: livro['status'],
-                          capa: null, // se tiver imagem, passa aqui
+                          imagem: null, // se tiver imagem, passa aqui
                         ),
                       );
                     },

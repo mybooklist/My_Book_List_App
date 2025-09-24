@@ -24,7 +24,7 @@
             "ano_publicacao": "2024",
             "avaliacao": 4.5,
             "status": "Lido",
-            "imagem": "lib/recursos/images/o-massacre-da-familia-hope.jpeg",
+            "imagem": "recursos/images/o-massacre-da-familia-hope.jpeg",
             "inicio_leitura": "18-04-2025",
             "fim_leitura": "18-05-2025",
             "resenha": " "
@@ -39,7 +39,7 @@
             "ano_publicacao": "2025",
             "avaliacao": 3.5,
             "status": "Lido",
-            "imagem": "lib/recursos/images/no-meio-da-noite.jpg",
+            "imagem": "recursos/images/no-meio-da-noite.jpg",
             "inicio_leitura": "22-08-2025",
             "fim_leitura": "30-08-2025",
             "resenha": " "
@@ -54,7 +54,7 @@
             "ano_publicacao": "2021",
             "avaliacao": 5,
             "status": "Lido",
-            "imagem": "lib/recursos/images/atos-humanos.jpeg",
+            "imagem": "recursos/images/atos-humanos.jpeg",
             "inicio_leitura": "10-12-2024",
             "fim_leitura": "11-02-2024",
             "resenha": " "
@@ -69,7 +69,7 @@
             "ano_publicacao": "2023",
             "avaliacao": 5,
             "status": "Lido",
-            "imagem": "lib/recursos/images/o-livro-branco.jpeg",
+            "imagem": "recursos/images/o-livro-branco.jpeg",
             "inicio_leitura": "05-03-2025",
             "fim_leitura": "04-04-2025",
             "resenha": " "
@@ -84,7 +84,7 @@
             "ano_publicacao": "2018",
             "avaliacao": 3.5,
             "status": "Lido",
-            "imagem": "lib/recursos/images/o-homem-de-giz.jpeg",
+            "imagem": "recursos/images/o-homem-de-giz.jpeg",
             "inicio_leitura": "12-07-2024",
             "fim_leitura": "21-07-2024",
             "resenha": " "
@@ -99,7 +99,7 @@
             "ano_publicacao": "2023",
             "avaliacao": null,
             "status": "Lendo",
-            "imagem": "lib/recursos/images/a-empregada.jpeg",
+            "imagem": "recursos/images/a-empregada.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
             "resenha": null
@@ -114,7 +114,7 @@
             "ano_publicacao": "2019",
             "avaliacao": null,
             "status": "Lendo",
-            "imagem": "lib/recursos/images/a-sociedade-do-anel.jpeg",
+            "imagem": "recursos/images/a-sociedade-do-anel.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
             "resenha": null
@@ -129,7 +129,7 @@
             "ano_publicacao": "2022",
             "avaliacao": null,
             "status": "Quero ler",
-            "imagem": "lib/recursos/images/como-tigres-na-neve.jpg",
+            "imagem": "recursos/images/como-tigres-na-neve.jpg",
             "inicio_leitura": null,
             "fim_leitura": null,
             "resenha": null
@@ -144,7 +144,7 @@
             "ano_publicacao": "2020",
             "avaliacao": null,
             "status": "Quero ler",
-            "imagem": "lib/recursos/images/dragoes-de-eter-1.jpeg",
+            "imagem": "recursos/images/dragoes-de-eter-1.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
             "resenha": null
@@ -159,7 +159,7 @@
             "ano_publicacao": "2018",
             "avaliacao": 5,
             "status": "Lido",
-            "imagem": "lib/recursos/images/orgulho-e-preconceito.jpeg",
+            "imagem": "recursos/images/orgulho-e-preconceito.jpeg",
             "inicio_leitura": "28-07-2022",
             "fim_leitura": "19-08-2022",
             "resenha": " "
@@ -174,7 +174,7 @@
             "ano_publicacao": "2023",
             "avaliacao": 5,
             "status": "Lido",
-            "imagem": "lib/recursos/images/amor-teoricamente.jpeg",
+            "imagem": "recursos/images/amor-teoricamente.jpeg",
             "inicio_leitura": "12-05-2024",
             "fim_leitura": "21-05-2024",
             "resenha": " "
@@ -189,7 +189,7 @@
             "ano_publicacao": "2019",
             "avaliacao": null,
             "status": "Quero ler",
-            "imagem": "lib/recursos/images/hobbit.jpeg",
+            "imagem": "recursos/images/hobbit.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
             "resenha": null
@@ -204,7 +204,7 @@
             "ano_publicacao": "2021",
             "avaliacao": null,
             "status": "Quero ler",
-            "imagem": "lib/recursos/images/aquiles.jpg",
+            "imagem": "recursos/images/aquiles.jpg",
             "inicio_leitura": null,
             "fim_leitura": null,
             "resenha": null
@@ -219,7 +219,7 @@
             "ano_publicacao": "2018",
             "avaliacao": null,
             "status": "Quero ler",
-            "imagem": "lib/recursos/images/dracula.jpeg",
+            "imagem": "recursos/images/dracula.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
             "resenha": null

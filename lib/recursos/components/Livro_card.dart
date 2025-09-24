@@ -6,14 +6,14 @@ class Livro_card extends StatelessWidget {
   final String titulo;
   final String autor;
   final String status;
-  final String? capa;
+  final String? imagem;
 
   const Livro_card({
     super.key,
     required this.titulo,
     required this.autor,
     required this.status,
-    this.capa,
+    this.imagem,
   });
 
   @override
@@ -32,14 +32,14 @@ class Livro_card extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.grey[200],
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                image: capa != null
+                image: imagem != null
                     ? DecorationImage(
-                        image: AssetImage(capa!), // pode trocar por NetworkImage
+                        image: AssetImage(imagem!), // pode trocar por NetworkImage
                         fit: BoxFit.cover,
                       )
                     : null,
               ),
-              child: capa == null
+              child: imagem == null
                   ? const Center(
                       child: Icon(Icons.image_not_supported,
                           size: 40, color: Colors.grey),
