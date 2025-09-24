@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' as root_bundle;
+import 'package:my_book_list/App_colors.dart';
 import 'package:my_book_list/recursos/telas/Detalhes.dart';
 import 'package:my_book_list/recursos/components/Livro_card.dart';
 
@@ -55,9 +56,11 @@ class _LivrosState extends State<Livros> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Book List'),
-        backgroundColor: Colors.blue,
+        title: const Text('My Book List', style: TextStyle(color: AppColors.textLight)),
+        backgroundColor: AppColors.accent,
+        centerTitle: true,
         elevation: 0,
+        
       ),
       body: Column(
         children: [
@@ -67,10 +70,10 @@ class _LivrosState extends State<Livros> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildFilterChip('Todos'),
-                _buildFilterChip('Lido'),
-                _buildFilterChip('Lendo'),
-                _buildFilterChip('Quero ler'),
+                _buildFilterChip('Todos', Icons.list),
+                _buildFilterChip('Lido', Icons.check),
+                _buildFilterChip('Lendo', Icons.book),
+                _buildFilterChip('Quero ler', Icons.bookmark_border),
               ],
             ),
           ),
@@ -117,28 +120,41 @@ class _LivrosState extends State<Livros> {
         onPressed: () {
           // ação para adicionar livro
         },
-        backgroundColor: Colors.blue,
+        backgroundColor: AppColors.accent,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
-  Widget _buildFilterChip(String label) {
-    return FilterChip(
-      label: Text(label),
-      selected: selectedFilter == label,
-      onSelected: (bool selected) {
-        setState(() {
-          selectedFilter = selected ? label : 'Todos';
-        });
-      },
-      selectedColor: Colors.blue,
-      checkmarkColor: Colors.white,
-      labelStyle: TextStyle(
+  Widget _buildFilterChip(String label, IconData icon) {
+  return FilterChip(
+    avatar: Icon(
+      icon,
+      size: 20,
+      color: selectedFilter == label ? Colors.white : Colors.black,
+    ),
+    label: Text(
+      label,
+      style: TextStyle(
         color: selectedFilter == label ? Colors.white : Colors.black,
       ),
-    );
-  }
+    ),
+    selected: selectedFilter == label,
+    onSelected: (bool selected) {
+      setState(() {
+        selectedFilter = selected ? label : 'Todos';
+      });
+    },
+    backgroundColor: Colors.grey[200], // cor de fundo quando não selecionado
+    selectedColor: AppColors.accent,   // cor de fundo quando selecionado
+    checkmarkColor: Colors.transparent, // garante que não apareça check
+    showCheckmark: false,               // remove o check
+    elevation: 0,                       // remove sombra
+    pressElevation: 0,                  // remove sombra ao pressionar
+  );
+}
+
+
 
   Widget _buildCounter(String title, String count) {
     return Column(

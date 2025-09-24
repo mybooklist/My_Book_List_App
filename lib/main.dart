@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_book_list/recursos/telas/Livros.dart';
+// ignore: unused_import
+import 'package:my_book_list/App_colors.dart';
+
 
 void main() {
   runApp(MyBookListApp());
@@ -14,7 +17,7 @@ class MyBookListApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Book List',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: AppColors.primary,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Livros(), // Página inicial
