@@ -86,7 +86,7 @@ class _LivrosState extends State<Livros> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
-                      childAspectRatio: 0.65,
+                      childAspectRatio: 0.55,
                     ),
                     itemBuilder: (context, index) {
                       final livro = getFiltroLivros()[index];
@@ -103,7 +103,7 @@ class _LivrosState extends State<Livros> {
                           titulo: livro['titulo'],
                           autor: livro['autor'],
                           status: livro['status'],
-                          imagem: null, // se tiver imagem, passa aqui
+                          imagem: livro['imagem'],
                         ),
                       );
                     },

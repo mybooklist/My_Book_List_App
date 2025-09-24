@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, camel_case_types
+// ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
 
@@ -19,77 +19,74 @@ class Livro_card extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 3,
       child: Column(
+        mainAxisSize: MainAxisSize.min, // só ocupa o necessário
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Capa do livro
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                image: imagem != null
-                    ? DecorationImage(
-                        image: AssetImage(imagem!), // pode trocar por NetworkImage
-                        fit: BoxFit.cover,
-                      )
-                    : null,
-              ),
-              child: imagem == null
-                  ? const Center(
-                      child: Icon(Icons.image_not_supported,
-                          size: 40, color: Colors.grey),
+          // Imagem com proporção fixa
+          AspectRatio(
+            aspectRatio: 3 / 4,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              child: imagem != null
+                  ? Image.asset(
+                      imagem!,
+                      fit: BoxFit.cover,
                     )
-                  : null,
+                  : Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image, size: 50),
+                    ),
             ),
           ),
 
-          // Título e autor
+          // Textos + tag
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   titulo,
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                      fontSize: 14, fontWeight: FontWeight.bold),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   autor,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ],
-            ),
-          ),
+                const SizedBox(height: 6),
 
-          // Status
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-              margin: const EdgeInsets.all(6),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: _getStatusColor(status),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                status,
-                style: const TextStyle(color: Colors.white, fontSize: 10),
-              ),
+                // TAG colorida
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    // ignore: deprecated_member_use
+                    color: _getStatusColor(status).withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: _getStatusColor(status),
+                      width: 1,
+                    ),
+                  ),
+                  child: Text(
+                    status,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: _getStatusColor(status),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

@@ -30,7 +30,7 @@ flutter:
 
   assets:
     - lib/recursos/json/livros.json
-    - lib/recursos/images
+    - lib/recursos/images/
   
 
 
