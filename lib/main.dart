@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_book_list/recursos/telas/Livros.dart';
 
-
-
 void main() {
   runApp(MyBookListApp());
 }
@@ -20,7 +18,7 @@ class MyBookListApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Livros(), // Página inicial
-      debugShowCheckedModeBanner: false, // Remove a banner de debug
+      debugShowCheckedModeBanner: false,
     );
   }
 }

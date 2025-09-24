@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_print, unused_element
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' as root_bundle;
@@ -35,7 +37,7 @@ class _LivrosState extends State<Livros> {
         isLoading = false;
       });
     } catch (e) {
-      print('❌ Erro ao carregar JSON: $e');
+      print('Erro ao carregar JSON: $e');
       setState(() {
         isLoading = false;
       });
@@ -72,19 +74,6 @@ class _LivrosState extends State<Livros> {
               ],
             ),
           ),
-
-          // Contadores
-          /**Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildCounter('Mobile', '16'),
-                _buildCounter('16', '24'),
-                _buildCounter('18', '18'),
-              ],
-            ),
-          ),*/
 
           // Lista de livros em Grid
           Expanded(
