@@ -102,13 +102,13 @@ class _LivrosState extends State<Livros> {
                                   titulo: livro['titulo'] ?? 'Sem título',
                                   autor: livro['autor'] ?? 'Autor desconhecido',
                                   status: livro['status'] ?? 'Sem status',
-                                  genero_literario: livro['genero'] ?? 'Sem gênero',
-                                  ano_publicacao: livro['ano'] ?? '----',
+                                  genero_literario: livro['genero_literario'] ?? 'Sem gênero',
+                                  ano_publicacao: livro['ano_publicacao'] ?? '----',
                                   resenha: livro['resenha'], // agora pode ser null
-                                  inicio_leitura: livro['inicioLeitura'],
-                                  fim_leitura: livro['fimLeitura'],
+                                  inicio_leitura: livro['inicio_leitura'],
+                                  fim_leitura: livro['fim_leitura'],
                                   imagem: livro['imagem'] ?? '',
-                                  numero_paginas: (livro['paginas'] ?? 0) as int,
+                                  numero_paginas: livro['numero_paginas']?.toString() ?? 'Não informado',
                                   avaliacao: (livro['avaliacao'] is num)
                                       ? (livro['avaliacao'] as num).toDouble()
                                       : 0.0,
@@ -116,6 +116,7 @@ class _LivrosState extends State<Livros> {
                               ),
                             );
                           },
+
                         child: Livro_card(
                           titulo: livro['titulo'],
                           autor: livro['autor'],

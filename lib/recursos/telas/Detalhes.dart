@@ -12,7 +12,7 @@ class Detalhes extends StatelessWidget {
   final String? inicio_leitura;
   final String? fim_leitura;
   final String imagem;
-  final int numero_paginas;
+  final String numero_paginas;
   final double? avaliacao; // Ex: 3.5 estrelas
 
 
@@ -54,7 +54,7 @@ class Detalhes extends StatelessWidget {
             // Imagem do livro
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
+              child: Image.asset(
                 imagem,
                 height: 200,
                 width: 150,
@@ -95,7 +95,8 @@ class Detalhes extends StatelessWidget {
               children: [
                 _infoCard("$numero_paginas", Icons.menu_book_outlined),
                _infoCard("${avaliacao?.toStringAsFixed(1) ?? "0.0"} ", Icons.star),
-                _infoCard(status, Icons.check_circle_outline),
+                _infoCard(status, _getStatusIcon(status)),
+
               ],
             ),
             const SizedBox(height: 16),
@@ -143,6 +144,20 @@ class Detalhes extends StatelessWidget {
       ),
     );
   }
+
+  IconData _getStatusIcon(String status) {
+  switch (status.toLowerCase()) {
+    case 'lido':
+      return Icons.book_rounded;  
+    case 'lendo':
+      return Icons.auto_stories_rounded; 
+    case 'quero ler':
+      return Icons.bookmark_rounded; 
+    default:
+      return Icons.help_outline; // caso não reconheça
+  }
+}
+
 
   Widget _infoCard(String text, IconData icon) {
     return Container(
