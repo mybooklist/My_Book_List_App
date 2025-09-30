@@ -95,13 +95,27 @@ class _LivrosState extends State<Livros> {
                       final livro = getFiltroLivros()[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Detalhes(livro: livro),
-                            ),
-                          );
-                        },
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Detalhes(
+                                  titulo: livro['titulo'] ?? 'Sem título',
+                                  autor: livro['autor'] ?? 'Autor desconhecido',
+                                  status: livro['status'] ?? 'Sem status',
+                                  genero_literario: livro['genero'] ?? 'Sem gênero',
+                                  ano_publicacao: livro['ano'] ?? '----',
+                                  resenha: livro['resenha'], // agora pode ser null
+                                  inicio_leitura: livro['inicioLeitura'],
+                                  fim_leitura: livro['fimLeitura'],
+                                  imagem: livro['imagem'] ?? '',
+                                  numero_paginas: (livro['paginas'] ?? 0) as int,
+                                  avaliacao: (livro['avaliacao'] is num)
+                                      ? (livro['avaliacao'] as num).toDouble()
+                                      : 0.0,
+                                ),
+                              ),
+                            );
+                          },
                         child: Livro_card(
                           titulo: livro['titulo'],
                           autor: livro['autor'],
