@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, non_constant_identifier_names
+// ignore_for_file: file_names, non_constant_identifier_names, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
 
@@ -94,9 +94,9 @@ class Detalhes extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _infoCard("$numero_paginas", Icons.menu_book_outlined),
-               _infoCard("${avaliacao?.toStringAsFixed(1) ?? "0.0"} ", Icons.star),
-                _infoCard(status, _getStatusIcon(status)),
+                _infoCard("$numero_paginas", Icon(Icons.menu_book_outlined, size: 18, color: Colors.grey[700])),
+                _infoCard("${avaliacao?.toStringAsFixed(1) ?? "0.0"} ", Icon(Icons.star, size: 18, color: Colors.grey[700])),
+                _infoCard(status, Icon(_getStatusIcon(status), size: 18, color: Colors.grey[700])),
 
               ],
             ),
@@ -106,8 +106,9 @@ class Detalhes extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _infoCard(genero_literario, _getGenreIcon(genero_literario)),
-                _infoCard(ano_publicacao, Icons.calendar_today),
+                //_infoCard(genero_literario, _getGenreIcon(genero_literario)),
+                _infoCard(genero_literario, getGenreIcon(genero_literario)),
+                _infoCard(ano_publicacao, Icon(Icons.calendar_today, size: 18, color: Colors.grey[700])),
               ],
             ),
             const SizedBox(height: 16),
@@ -136,8 +137,8 @@ class Detalhes extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _infoCard("Início: ${inicio_leitura ?? "-"}", Icons.date_range),
-                _infoCard("Fim: ${fim_leitura ?? "-"}", Icons.event_available),
+                _infoCard("Início: ${inicio_leitura ?? "-"}", Icon(Icons.date_range, size: 18, color: Colors.grey[700])),
+                _infoCard("Fim: ${fim_leitura ?? "-"}", Icon(Icons.event_available, size: 18, color: Colors.grey[700])),
               ],
             ),
           ],
@@ -161,45 +162,47 @@ class Detalhes extends StatelessWidget {
     }
 
     //função para pegar os ícones de cada genero
-    IconData _getGenreIcon(String genero_literario) {
-  switch (genero_literario.toLowerCase()) {
-    case 'literatura estrangeira':
-      return Icons.language_rounded;
-    case 'suspense e mistério':
-      return Icons.search_rounded;
-    case 'crime e investigação':
-      return Icons.gavel_rounded;
-    case 'ficção e história':
-      return Icons.menu_book_rounded;
-    case 'fantasia e aventura':
-      return Icons.auto_awesome_rounded;
-    case 'romance':
-      return Icons.favorite_rounded;
-    case 'terror':
-      return Icons.nights_stay_rounded;
-    default:
-      return Icons.help_outline; // caso não reconheça
-  }
+
+static const Map<String, String> genreIcons = {
+  'literatura estrangeira': 'lib/recursos/images/books.png',
+  'suspense e mistério': 'lib/recursos/images/thriller.png',
+  'crime e investigação': 'lib/recursos/images/crime-scene.png',
+  'ficção e história': 'lib/recursos/images/parchment.png',
+  'fantasia e aventura': 'lib/recursos/images/hat.png',
+  'romance': 'lib/recursos/images/love.png',
+  'terror': 'lib/recursos/images/ghost.png',
+};
+
+Widget getGenreIcon(String genero_literario) {
+  String path = genreIcons[genero_literario.toLowerCase()] ?? 'assets/images/help.png';
+
+  return Image.asset(
+    path,
+    width: 24,
+    height: 24,
+  );
 }
 
 
-  Widget _infoCard(String text, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade400),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: Colors.grey[700]),
-          const SizedBox(width: 6),
-          Text(
-            text,
-            style: const TextStyle(fontSize: 14),
-          ),
-        ],
-      ),
-    );
-  }
+
+  Widget _infoCard(String text, Widget icon) {
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: Colors.grey.shade400),
+    ),
+    child: Row(
+      children: [
+        icon, // agora pode ser tanto Icon quanto Image.asset
+        const SizedBox(width: 6),
+        Text(
+          text,
+          style: const TextStyle(fontSize: 14),
+        ),
+      ],
+    ),
+  );
+}
+
 }
