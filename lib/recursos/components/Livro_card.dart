@@ -29,12 +29,11 @@ class Livro_card extends StatelessWidget {
           AspectRatio(
             aspectRatio: 3 / 4,
             child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(12),
+              ),
               child: imagem != null
-                  ? Image.asset(
-                      imagem!,
-                      fit: BoxFit.cover,
-                    )
+                  ? Image.asset(imagem!, fit: BoxFit.cover)
                   : Container(
                       color: Colors.grey[300],
                       child: const Icon(Icons.image, size: 50),
@@ -52,7 +51,9 @@ class Livro_card extends StatelessWidget {
                 Text(
                   titulo,
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.bold),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -66,8 +67,10 @@ class Livro_card extends StatelessWidget {
 
                 // TAG colorida
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     // ignore: deprecated_member_use
                     color: _getStatusColor(status).withOpacity(0.15),

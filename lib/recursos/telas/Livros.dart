@@ -27,8 +27,9 @@ class _LivrosState extends State<Livros> {
 
   Future<void> loadLivrosFromJson() async {
     try {
-      final jsonData = await root_bundle.rootBundle
-          .loadString('lib/recursos/json/livros.json');
+      final jsonData = await root_bundle.rootBundle.loadString(
+        'lib/recursos/json/livros.json',
+      );
 
       final Map<String, dynamic> jsonMap = json.decode(jsonData);
       final List<dynamic> jsonList = jsonMap['livros'];
@@ -56,11 +57,13 @@ class _LivrosState extends State<Livros> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Book List', style: TextStyle(color: AppColors.textLight)),
+        title: const Text(
+          'My Book List',
+          style: TextStyle(color: AppColors.textLight),
+        ),
         backgroundColor: AppColors.accent,
         centerTitle: true,
         elevation: 0,
-        
       ),
       body: Column(
         children: [
@@ -86,36 +89,41 @@ class _LivrosState extends State<Livros> {
                     itemCount: getFiltroLivros().length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 0.55,
-                    ),
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                          childAspectRatio: 0.55,
+                        ),
                     itemBuilder: (context, index) {
                       final livro = getFiltroLivros()[index];
                       return GestureDetector(
                         onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Detalhes(
-                                  titulo: livro['titulo'] ?? 'Sem título',
-                                  autor: livro['autor'] ?? 'Autor desconhecido',
-                                  status: livro['status'] ?? 'Sem status',
-                                  genero_literario: livro['genero_literario'] ?? 'Sem gênero',
-                                  ano_publicacao: livro['ano_publicacao'] ?? '----',
-                                  resenha: livro['resenha'], // agora pode ser null
-                                  inicio_leitura: livro['inicio_leitura'],
-                                  fim_leitura: livro['fim_leitura'],
-                                  imagem: livro['imagem'] ?? '',
-                                  numero_paginas: livro['numero_paginas']?.toString() ?? 'Não informado',
-                                  avaliacao: (livro['avaliacao'] is num)
-                                      ? (livro['avaliacao'] as num).toDouble()
-                                      : 0.0,
-                                ),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Detalhes(
+                                titulo: livro['titulo'] ?? 'Sem título',
+                                autor: livro['autor'] ?? 'Autor desconhecido',
+                                status: livro['status'] ?? 'Sem status',
+                                genero_literario:
+                                    livro['genero_literario'] ?? 'Sem gênero',
+                                ano_publicacao:
+                                    livro['ano_publicacao'] ?? '----',
+                                resenha:
+                                    livro['resenha'], // agora pode ser null
+                                inicio_leitura: livro['inicio_leitura'],
+                                fim_leitura: livro['fim_leitura'],
+                                imagem: livro['imagem'] ?? '',
+                                numero_paginas:
+                                    livro['numero_paginas']?.toString() ??
+                                    'Não informado',
+                                avaliacao: (livro['avaliacao'] is num)
+                                    ? (livro['avaliacao'] as num).toDouble()
+                                    : 0.0,
                               ),
-                            );
-                          },
+                            ),
+                          );
+                        },
 
                         child: Livro_card(
                           titulo: livro['titulo'],
@@ -142,44 +150,39 @@ class _LivrosState extends State<Livros> {
   }
 
   Widget _buildFilterChip(String label, IconData icon) {
-  return FilterChip(
-    avatar: Icon(
-      icon,
-      size: 20,
-      color: selectedFilter == label ? Colors.white : AppColors.accent,
-    ),
-    label: Text(
-      label,
-      style: TextStyle(
-        color: selectedFilter == label ? Colors.white : Colors.black,
+    return FilterChip(
+      avatar: Icon(
+        icon,
+        size: 20,
+        color: selectedFilter == label ? Colors.white : AppColors.accent,
       ),
-    ),
-    selected: selectedFilter == label,
-    onSelected: (bool selected) {
-      setState(() {
-        selectedFilter = selected ? label : 'Todos';
-      });
-    },
-    backgroundColor: Colors.grey[200], // cor de fundo quando não selecionado
-    selectedColor: AppColors.accent,   // cor de fundo quando selecionado
-    checkmarkColor: Colors.transparent, // garante que não apareça check
-    showCheckmark: false,               // remove o check
-    elevation: 0,                       // remove sombra
-    pressElevation: 0,                  // remove sombra ao pressionar
-  );
-}
-
-
+      label: Text(
+        label,
+        style: TextStyle(
+          color: selectedFilter == label ? Colors.white : Colors.black,
+        ),
+      ),
+      selected: selectedFilter == label,
+      onSelected: (bool selected) {
+        setState(() {
+          selectedFilter = selected ? label : 'Todos';
+        });
+      },
+      backgroundColor: Colors.grey[200], // cor de fundo quando não selecionado
+      selectedColor: AppColors.accent, // cor de fundo quando selecionado
+      checkmarkColor: Colors.transparent, // garante que não apareça check
+      showCheckmark: false, // remove o check
+      elevation: 0, // remove sombra
+      pressElevation: 0, // remove sombra ao pressionar
+    );
+  }
 
   Widget _buildCounter(String title, String count) {
     return Column(
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(

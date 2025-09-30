@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
-
+import 'package:my_book_list/App_colors.dart';
 
 class Detalhes extends StatelessWidget {
   final String titulo;
@@ -16,8 +16,7 @@ class Detalhes extends StatelessWidget {
   final String numero_paginas;
   final double? avaliacao; // Ex: 3.5 estrelas
 
-
-  const Detalhes({
+  Detalhes({
     super.key,
     required this.titulo,
     required this.autor,
@@ -31,6 +30,63 @@ class Detalhes extends StatelessWidget {
     required this.numero_paginas,
     required this.avaliacao,
   });
+
+  // mapa constante (agora é compile-time constant, permite manter o construtor const)
+  static const Map<String, String> _genreIcons = {
+    'literatura estrangeira': 'lib/recursos/images/books.png',
+    'suspense e mistério': 'lib/recursos/images/thriller.png',
+    'crime e investigação': 'lib/recursos/images/crime-scene.png',
+    'ficção e história': 'lib/recursos/images/parchment.png',
+    'fantasia e aventura': 'lib/recursos/images/hat.png',
+    'romance': 'lib/recursos/images/love.png',
+    'terror': 'lib/recursos/images/ghost.png',
+  };
+
+  // retorna um Widget (Image.asset); tamanho padrão ajustável
+  Widget getGenreIcon(String genero_literario, {double size = 18}) {
+    final path = _genreIcons[genero_literario.toLowerCase()] ?? 'assets/images/help.png';
+    return Image.asset(
+      path,
+      width: size,
+      height: size,
+      errorBuilder: (context, error, stackTrace) => Icon(Icons.help_outline, size: size),
+    );
+  }
+
+  // função para pegar os icones de cada status
+  IconData _getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case 'lido':
+        return Icons.book_rounded;
+      case 'lendo':
+        return Icons.auto_stories_rounded;
+      case 'quero ler':
+        return Icons.bookmark_rounded;
+      default:
+        return Icons.help_outline;
+    }
+  }
+
+  // agora aceita Widget para suportar Icon(...) ou Image.asset(...)
+  Widget _infoCard(String text, Widget icon) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.textSecondary),
+      ),
+      child: Row(
+        children: [
+          icon,
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: const TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +141,7 @@ class Detalhes extends StatelessWidget {
               autor,
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey[700],
+                color: AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 16),
@@ -95,9 +151,8 @@ class Detalhes extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _infoCard("$numero_paginas", Icon(Icons.menu_book_outlined, size: 18, color: Colors.grey[700])),
-                _infoCard("${avaliacao?.toStringAsFixed(1) ?? "0.0"} ", Icon(Icons.star, size: 18, color: Colors.grey[700])),
+                _infoCard("${avaliacao?.toStringAsFixed(1) ?? "0.0"}", Icon(Icons.star, size: 18, color: Colors.grey[700])),
                 _infoCard(status, Icon(_getStatusIcon(status), size: 18, color: Colors.grey[700])),
-
               ],
             ),
             const SizedBox(height: 16),
@@ -106,8 +161,7 @@ class Detalhes extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                //_infoCard(genero_literario, _getGenreIcon(genero_literario)),
-                _infoCard(genero_literario, getGenreIcon(genero_literario)),
+                _infoCard(genero_literario, getGenreIcon(genero_literario, size: 18)),
                 _infoCard(ano_publicacao, Icon(Icons.calendar_today, size: 18, color: Colors.grey[700])),
               ],
             ),
@@ -119,7 +173,7 @@ class Detalhes extends StatelessWidget {
               child: Text(
                 "Sua Resenha sobre esse Livro",
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 16,
                   color: Colors.grey[600],
                   fontWeight: FontWeight.bold,
                 ),
@@ -146,63 +200,4 @@ class Detalhes extends StatelessWidget {
       ),
     );
   }
-
-    //função para pegar os icones de cada status
-    IconData _getStatusIcon(String status) {
-    switch (status.toLowerCase()) {
-      case 'lido':
-        return Icons.book_rounded;  
-      case 'lendo':
-        return Icons.auto_stories_rounded; 
-      case 'quero ler':
-        return Icons.bookmark_rounded; 
-      default:
-        return Icons.help_outline; // caso não reconheça
-      }
-    }
-
-    //função para pegar os ícones de cada genero
-
-static const Map<String, String> genreIcons = {
-  'literatura estrangeira': 'lib/recursos/images/books.png',
-  'suspense e mistério': 'lib/recursos/images/thriller.png',
-  'crime e investigação': 'lib/recursos/images/crime-scene.png',
-  'ficção e história': 'lib/recursos/images/parchment.png',
-  'fantasia e aventura': 'lib/recursos/images/hat.png',
-  'romance': 'lib/recursos/images/love.png',
-  'terror': 'lib/recursos/images/ghost.png',
-};
-
-Widget getGenreIcon(String genero_literario) {
-  String path = genreIcons[genero_literario.toLowerCase()] ?? 'assets/images/help.png';
-
-  return Image.asset(
-    path,
-    width: 24,
-    height: 24,
-  );
-}
-
-
-
-  Widget _infoCard(String text, Widget icon) {
-  return Container(
-    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: Colors.grey.shade400),
-    ),
-    child: Row(
-      children: [
-        icon, // agora pode ser tanto Icon quanto Image.asset
-        const SizedBox(width: 6),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 14),
-        ),
-      ],
-    ),
-  );
-}
-
 }
