@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+
 class Detalhes extends StatelessWidget {
   final String titulo;
   final String autor;
@@ -56,8 +57,8 @@ class Detalhes extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
                 imagem,
-                height: 200,
-                width: 150,
+                height: 280,
+                width: 200,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
@@ -105,7 +106,7 @@ class Detalhes extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _infoCard(genero_literario, Icons.category),
+                _infoCard(genero_literario, _getGenreIcon(genero_literario)),
                 _infoCard(ano_publicacao, Icons.calendar_today),
               ],
             ),
@@ -125,7 +126,7 @@ class Detalhes extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              resenha ?? "Sem resenha disponível.",
+              resenha ?? "Você ainda não adicionou uma resenha sobre esse livro.",
               style: const TextStyle(fontSize: 14),
               textAlign: TextAlign.justify,
             ),
@@ -145,14 +146,37 @@ class Detalhes extends StatelessWidget {
     );
   }
 
-  IconData _getStatusIcon(String status) {
-  switch (status.toLowerCase()) {
-    case 'lido':
-      return Icons.book_rounded;  
-    case 'lendo':
-      return Icons.auto_stories_rounded; 
-    case 'quero ler':
-      return Icons.bookmark_rounded; 
+    //função para pegar os icones de cada status
+    IconData _getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case 'lido':
+        return Icons.book_rounded;  
+      case 'lendo':
+        return Icons.auto_stories_rounded; 
+      case 'quero ler':
+        return Icons.bookmark_rounded; 
+      default:
+        return Icons.help_outline; // caso não reconheça
+      }
+    }
+
+    //função para pegar os ícones de cada genero
+    IconData _getGenreIcon(String genero_literario) {
+  switch (genero_literario.toLowerCase()) {
+    case 'literatura estrangeira':
+      return Icons.language_rounded;
+    case 'suspense e mistério':
+      return Icons.search_rounded;
+    case 'crime e investigação':
+      return Icons.gavel_rounded;
+    case 'ficção e história':
+      return Icons.menu_book_rounded;
+    case 'fantasia e aventura':
+      return Icons.auto_awesome_rounded;
+    case 'romance':
+      return Icons.favorite_rounded;
+    case 'terror':
+      return Icons.nights_stay_rounded;
     default:
       return Icons.help_outline; // caso não reconheça
   }
