@@ -16,7 +16,7 @@ class Detalhes extends StatelessWidget {
   final String numero_paginas;
   final double? avaliacao; // Ex: 3.5 estrelas
 
-  Detalhes({
+  const Detalhes({
     super.key,
     required this.titulo,
     required this.autor,
@@ -33,13 +33,13 @@ class Detalhes extends StatelessWidget {
 
   // mapa constante (agora é compile-time constant, permite manter o construtor const)
   static const Map<String, String> _genreIcons = {
-    'literatura estrangeira': 'lib/recursos/images/books.png',
+    'literatura estrangeira': 'lib/recursos/images/globe.png',
     'suspense e mistério': 'lib/recursos/images/thriller.png',
-    'crime e investigação': 'lib/recursos/images/crime-scene.png',
-    'ficção e história': 'lib/recursos/images/parchment.png',
-    'fantasia e aventura': 'lib/recursos/images/hat.png',
-    'romance': 'lib/recursos/images/love.png',
-    'terror': 'lib/recursos/images/ghost.png',
+    'crime e investigação': 'lib/recursos/images/investigation.png',
+    'ficção e história': 'lib/recursos/images/writing.png',
+    'fantasia e aventura': 'lib/recursos/images/witch-hat.png',
+    'romance': 'lib/recursos/images/like.png',
+    'terror': 'lib/recursos/images/bat.png',
   };
 
   // retorna um Widget (Image.asset); tamanho padrão ajustável
