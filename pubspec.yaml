@@ -21,8 +21,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+  flutter_native_splash: ^2.4.6
+  
   flutter_lints: ^5.0.0
+
+flutter_native_splash:
+  color: "#ffffff" # cor de fundo
+  image: lib\recursos\images\my-book-list.png 
+  android: true
+  
 
 flutter:
 
