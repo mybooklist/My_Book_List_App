@@ -10,5 +10,6 @@ class AppColors {
   static const Color textPrimary = Color(0xFF0E0204); // Preto para textos
   static const Color textSecondary = Color(0xFF404040); // Cinza para textos secundários
   static const Color textLight = Color(0xFFEDEBDD); // Creme para textos claros
-  
+  static const Color avaliacao = Color(0xFFFFBE55); // Amarelo para avaliação
+  static const Color cinza2 = Color(0xFFBFBFBF); // Cinza claro 
 }

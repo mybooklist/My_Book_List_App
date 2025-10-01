@@ -73,7 +73,7 @@ class Detalhes extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.textSecondary),
+        border: Border.all(color: AppColors.cinza2),
       ),
       child: Row(
         children: [
@@ -99,8 +99,8 @@ class Detalhes extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         actions: const [
-          Icon(Icons.grid_view_outlined),
-          SizedBox(width: 12),
+          Icon(Icons.keyboard_control_rounded),
+          SizedBox(width: 16),
         ],
       ),
       body: SingleChildScrollView(
@@ -150,9 +150,9 @@ class Detalhes extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _infoCard("$numero_paginas", Icon(Icons.menu_book_outlined, size: 18, color: Colors.grey[700])),
-                _infoCard("${avaliacao?.toStringAsFixed(1) ?? "0.0"}", Icon(Icons.star, size: 18, color: Colors.grey[700])),
-                _infoCard(status, Icon(_getStatusIcon(status), size: 18, color: Colors.grey[700])),
+                _infoCard("$numero_paginas", Icon(Icons.menu_book_outlined, size: 18, color: AppColors.textPrimary)),
+                _infoCard("${avaliacao?.toStringAsFixed(1) ?? "0.0"}", Icon(Icons.star, size: 18, color: AppColors.textPrimary)),
+                _infoCard(status, Icon(_getStatusIcon(status), size: 18, color: AppColors.textPrimary)),
               ],
             ),
             const SizedBox(height: 16),
@@ -162,7 +162,7 @@ class Detalhes extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _infoCard(genero_literario, getGenreIcon(genero_literario, size: 18)),
-                _infoCard(ano_publicacao, Icon(Icons.calendar_today, size: 18, color: Colors.grey[700])),
+                _infoCard(ano_publicacao, Icon(Icons.calendar_today, size: 18, color: AppColors.textPrimary)),
               ],
             ),
             const SizedBox(height: 16),
@@ -174,7 +174,7 @@ class Detalhes extends StatelessWidget {
                 "Sua Resenha sobre esse Livro",
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey[600],
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -191,8 +191,8 @@ class Detalhes extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _infoCard("Início: ${inicio_leitura ?? "-"}", Icon(Icons.date_range, size: 18, color: Colors.grey[700])),
-                _infoCard("Fim: ${fim_leitura ?? "-"}", Icon(Icons.event_available, size: 18, color: Colors.grey[700])),
+                _infoCard("Início: ${inicio_leitura ?? "-"}", Icon(Icons.date_range, size: 18, color: AppColors.textPrimary)),
+                _infoCard("Fim: ${fim_leitura ?? "-"}", Icon(Icons.event_available, size: 18, color: AppColors.textPrimary)),
               ],
             ),
           ],
