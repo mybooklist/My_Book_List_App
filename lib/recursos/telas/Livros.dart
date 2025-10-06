@@ -23,7 +23,42 @@ class _LivrosState extends State<Livros> {
   void initState() {
     super.initState();
     loadLivrosFromJson();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 200 &&
+          !isLoadingMore) {
+        _loadMoreLivros();
+      }
+    });
   }
+
+  void _loadMoreLivros() {
+    if (livrosVisiveis.length >= livros.length) return;
+
+    setState(() => isLoadingMore = true);
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      final start = currentPage * pageSize;
+      final end = start + pageSize;
+      final novosLivros = livros.sublist(
+        start,
+        end > livros.length ? livros.length : end,
+      );
+
+      setState(() {
+        livrosVisiveis.addAll(novosLivros);
+        currentPage++;
+        isLoadingMore = false;
+      });
+    });
+  }
+
+  final ScrollController _scrollController = ScrollController();
+  List<dynamic> livrosVisiveis = [];
+  int pageSize = 4;
+  int currentPage = 0;
+  bool isLoadingMore = false;
 
   Future<void> loadLivrosFromJson() async {
     try {
@@ -36,6 +71,8 @@ class _LivrosState extends State<Livros> {
 
       setState(() {
         livros = jsonList;
+        livrosVisiveis = livros.take(pageSize).toList();
+        currentPage = 1;
         isLoading = false;
       });
     } catch (e) {
@@ -57,13 +94,22 @@ class _LivrosState extends State<Livros> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'My Book List',
-          style: TextStyle(color: AppColors.textLight),
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Image.asset(
+          'lib/recursos/images/my-book-list.png', // substitua pelo seu caminho
+          height: 30,
+          width: 30,
         ),
-        backgroundColor: AppColors.accent,
-        centerTitle: true,
-        elevation: 0,
+      ),
+      title: const Text(
+        'My Book List',
+        style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold,
+),
+      ),
+      backgroundColor: AppColors.background,
+      centerTitle: true,
+      elevation: 0,
       ),
       body: Column(
         children: [
@@ -86,7 +132,8 @@ class _LivrosState extends State<Livros> {
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : GridView.builder(
-                    itemCount: getFiltroLivros().length,
+                    controller: _scrollController,
+                    itemCount: livrosVisiveis.length + (isLoadingMore ? 1 : 0),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -95,43 +142,45 @@ class _LivrosState extends State<Livros> {
                           childAspectRatio: 0.55,
                         ),
                     itemBuilder: (context, index) {
-                      final livro = getFiltroLivros()[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Detalhes(
-                                titulo: livro['titulo'] ?? 'Sem título',
-                                autor: livro['autor'] ?? 'Autor desconhecido',
-                                status: livro['status'] ?? 'Sem status',
-                                genero_literario:
-                                    livro['genero_literario'] ?? 'Sem gênero',
-                                ano_publicacao:
-                                    livro['ano_publicacao'] ?? '----',
-                                resumo:
-                                    livro['resenha'], // agora pode ser null
-                                inicio_leitura: livro['inicio_leitura'],
-                                fim_leitura: livro['fim_leitura'],
-                                imagem: livro['imagem'] ?? '',
-                                numero_paginas:
-                                    livro['numero_paginas']?.toString() ??
-                                    'Não informado',
-                                avaliacao: (livro['avaliacao'] is num)
-                                    ? (livro['avaliacao'] as num).toDouble()
-                                    : 0.0,
+                      if (index < livrosVisiveis.length) {
+                        final livro = livrosVisiveis[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Detalhes(
+                                  titulo: livro['titulo'] ?? 'Sem título',
+                                  autor: livro['autor'] ?? 'Autor desconhecido',
+                                  status: livro['status'] ?? 'Sem status',
+                                  genero_literario:
+                                      livro['genero_literario'] ?? 'Sem gênero',
+                                  ano_publicacao:
+                                      livro['ano_publicacao'] ?? '----',
+                                  resumo: livro['resumo'],
+                                  inicio_leitura: livro['inicio_leitura'],
+                                  fim_leitura: livro['fim_leitura'],
+                                  imagem: livro['imagem'] ?? '',
+                                  numero_paginas:
+                                      livro['numero_paginas']?.toString() ??
+                                      'Não informado',
+                                  avaliacao:
+                                      livro['avaliacao']?.toString() ??
+                                      'Sem avaliação',
+                                ),
                               ),
-                            ),
-                          );
-                        },
-
-                        child: Livro_card(
-                          titulo: livro['titulo'],
-                          autor: livro['autor'],
-                          status: livro['status'],
-                          imagem: livro['imagem'],
-                        ),
-                      );
+                            );
+                          },
+                          child: Livro_card(
+                            titulo: livro['titulo'],
+                            autor: livro['autor'],
+                            status: livro['status'],
+                            imagem: livro['imagem'],
+                          ),
+                        );
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
                     },
                   ),
           ),

@@ -14,7 +14,7 @@ class Detalhes extends StatelessWidget {
   final String? fim_leitura;
   final String imagem;
   final String numero_paginas;
-  final double? avaliacao; 
+  final String? avaliacao; 
 
   const Detalhes({
     super.key,
@@ -151,7 +151,7 @@ class Detalhes extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _infoCard("$numero_paginas", Icon(Icons.menu_book_outlined, size: 18, color: AppColors.textPrimary)),
-                _infoCard("${avaliacao?.toStringAsFixed(1) ?? "0.0"}", Icon(Icons.star, size: 18, color: AppColors.textPrimary)),
+                _infoCard(avaliacao ?? "Sem avaliação", Icon(Icons.favorite_rounded, size: 18, color: AppColors.textPrimary)),
                 _infoCard(status, Icon(_getStatusIcon(status), size: 18, color: AppColors.textPrimary)),
               ],
             ),
@@ -171,7 +171,7 @@ class Detalhes extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                "Sua Resenha sobre esse Livro",
+                "Seu resumo sobre esse Livro",
                 style: TextStyle(
                   fontSize: 16,
                   color: AppColors.textPrimary,
@@ -181,7 +181,7 @@ class Detalhes extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              resumo ?? "Você ainda não adicionou uma resenha sobre esse livro.",
+              resumo ?? "Você ainda não adicionou um resumo sobre esse livro.",
               style: const TextStyle(fontSize: 14),
               textAlign: TextAlign.justify,
             ),
