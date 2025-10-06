@@ -109,7 +109,7 @@ class _LivrosState extends State<Livros> {
                                     livro['genero_literario'] ?? 'Sem gênero',
                                 ano_publicacao:
                                     livro['ano_publicacao'] ?? '----',
-                                resenha:
+                                resumo:
                                     livro['resenha'], // agora pode ser null
                                 inicio_leitura: livro['inicio_leitura'],
                                 fim_leitura: livro['fim_leitura'],

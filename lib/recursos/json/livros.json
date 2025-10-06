@@ -7,12 +7,12 @@
             "genero_literario": "Literatura Estrangeira",
             "numero_paginas": "528",
             "ano_publicacao": "2020",
-            "avaliacao": 5,
+            "avaliacao": "Ótimo",
             "status": "Lido",
             "imagem": "lib/recursos/images/pachinko.jpg",
             "inicio_leitura": "21-12-2024",
             "fim_leitura": "22-02-2025",
-            "resenha": "Um livro muito bom, achei a leitura muito intensa e cheia de significados. Quando vejo os momentos de dificuldade da Sunja e de sua família penso como esses tempos eram difíceis para todos mas ela teve realmente uma má sorte. Gostei muito do livro."
+            "resumo": "Um livro muito bom, achei a leitura muito intensa e cheia de significados. Quando vejo os momentos de dificuldade da Sunja e de sua família penso como esses tempos eram difíceis para todos mas ela teve realmente uma má sorte. Gostei muito do livro."
 
         },
         {
@@ -22,12 +22,12 @@
             "genero_literario": "Suspense e Mistério",
             "numero_paginas": "400",
             "ano_publicacao": "2024",
-            "avaliacao": 4.5,
+            "avaliacao": "Muito Bom",
             "status": "Lido",
             "imagem": "lib/recursos/images/o-massacre-da-familia-hope.jpeg",
             "inicio_leitura": "18-04-2025",
             "fim_leitura": "18-05-2025",
-            "resenha": "Li O Massacre da Família Hope em uma tacada só, e que leitura! A atmosfera da mansão isolada me deixou com aquele friozinho na espinha o tempo todo. A forma como a história vai se desenrolando, cheia de segredos e reviravoltas, me fez duvidar de todo mundo. Lenora, a única sobrevivente, é um mistério por si só, e acompanhar a Kit tentando desvendar o passado foi viciante. É aquele tipo de livro que você termina e fica pensando: será que entendi tudo mesmo?"
+            "resumo": "Li O Massacre da Família Hope em uma tacada só, e que leitura! A atmosfera da mansão isolada me deixou com aquele friozinho na espinha o tempo todo. A forma como a história vai se desenrolando, cheia de segredos e reviravoltas, me fez duvidar de todo mundo. Lenora, a única sobrevivente, é um mistério por si só, e acompanhar a Kit tentando desvendar o passado foi viciante. É aquele tipo de livro que você termina e fica pensando: será que entendi tudo mesmo?"
 
         },
         {
@@ -37,12 +37,12 @@
             "genero_literario": "Suspense e Mistério",
             "numero_paginas": "369",
             "ano_publicacao": "2025",
-            "avaliacao": 3.5,
+            "avaliacao": "Bom",
             "status": "Lido",
             "imagem": "lib/recursos/images/no-meio-da-noite.jpg",
             "inicio_leitura": "22-08-2025",
             "fim_leitura": "30-08-2025",
-            "resenha": "Esse livro me pegou de surpresa. Comecei achando que seria só mais um suspense sobre uma criança desaparecida, mas logo percebi que tinha muito mais por trás. A ambientação me lembrou um pouco Dark, com aquele clima meio sombrio e cheio de segredos enterrados. A escrita do Riley Sager me fez mergulhar na mente de uma protagonista marcada por um trauma absurdo, e foi impossível não sentir tudo junto com ela."
+            "resumo": "Esse livro me pegou de surpresa. Comecei achando que seria só mais um suspense sobre uma criança desaparecida, mas logo percebi que tinha muito mais por trás. A ambientação me lembrou um pouco Dark, com aquele clima meio sombrio e cheio de segredos enterrados. A escrita do Riley Sager me fez mergulhar na mente de uma protagonista marcada por um trauma absurdo, e foi impossível não sentir tudo junto com ela."
 
         },
         {
@@ -52,12 +52,12 @@
             "genero_literario": "Literatura Estrangeira",
             "numero_paginas": "192",
             "ano_publicacao": "2021",
-            "avaliacao": 5,
+            "avaliacao": "Ótimo",
             "status": "Lido",
             "imagem": "lib/recursos/images/atos-humanos.jpeg",
             "inicio_leitura": "10-12-2024",
             "fim_leitura": "11-02-2024",
-            "resenha": "Esse livro me atravessou de um jeito que poucos conseguiram. Atos Humanos não é só sobre um massacre na Coreia do Sul, é sobre o que significa ser humano diante da brutalidade. A cada capítulo, eu sentia como se estivesse ouvindo vozes de fantasmas, pessoas que viveram horrores e ainda assim tentam encontrar sentido. A escrita da Han Kang é poética e dolorosa, e me fez parar várias vezes só pra respirar. É uma leitura difícil, mas necessária."
+            "resumo": "Esse livro me atravessou de um jeito que poucos conseguiram. Atos Humanos não é só sobre um massacre na Coreia do Sul, é sobre o que significa ser humano diante da brutalidade. A cada capítulo, eu sentia como se estivesse ouvindo vozes de fantasmas, pessoas que viveram horrores e ainda assim tentam encontrar sentido. A escrita da Han Kang é poética e dolorosa, e me fez parar várias vezes só pra respirar. É uma leitura difícil, mas necessária."
 
         },
         {
@@ -67,12 +67,12 @@
             "genero_literario": "Literatura Estrangeira",
             "numero_paginas": "160",
             "ano_publicacao": "2023",
-            "avaliacao": 5,
+            "avaliacao": "Ótimo",
             "status": "Lido",
             "imagem": "lib/recursos/images/o-livro-branco.jpeg",
             "inicio_leitura": "05-03-2025",
             "fim_leitura": "04-04-2025",
-            "resenha": "Ler O Livro Branco foi como caminhar por uma nevasca silenciosa cada página parecia um floco de dor, beleza e contemplação. Não é um romance tradicional, mas uma meditação poética sobre luto, memória e renascimento. A autora escreve com uma delicadeza que me fez desacelerar, quase como se estivesse ouvindo uma respiração. O branco, em suas muitas formas — lençóis, neve, leite se transforma em símbolo de ausência e presença. É um livro que não grita, mas sussurra, e esses sussurros ficaram comigo por dias."
+            "resumo": "Ler O Livro Branco foi como caminhar por uma nevasca silenciosa cada página parecia um floco de dor, beleza e contemplação. Não é um romance tradicional, mas uma meditação poética sobre luto, memória e renascimento. A autora escreve com uma delicadeza que me fez desacelerar, quase como se estivesse ouvindo uma respiração. O branco, em suas muitas formas — lençóis, neve, leite se transforma em símbolo de ausência e presença. É um livro que não grita, mas sussurra, e esses sussurros ficaram comigo por dias."
 
         },
         {
@@ -82,12 +82,12 @@
             "genero_literario": "Crime e Investigação",
             "numero_paginas": "320",
             "ano_publicacao": "2018",
-            "avaliacao": 3.5,
+            "avaliacao": "Regular",
             "status": "Lido",
             "imagem": "lib/recursos/images/o-homem-de-giz.jpeg",
             "inicio_leitura": "12-07-2024",
             "fim_leitura": "21-07-2024",
-            "resenha": " "
+            "resumo": " "
 
         },
         {
@@ -102,7 +102,7 @@
             "imagem": "lib/recursos/images/a-empregada.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
-            "resenha": null
+            "resumo": null
 
         },
         {
@@ -117,7 +117,7 @@
             "imagem": "lib/recursos/images/a-sociedade-do-anel.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
-            "resenha": null
+            "resumo": null
 
         },
         {
@@ -132,7 +132,7 @@
             "imagem": "lib/recursos/images/como-tigres-na-neve.jpg",
             "inicio_leitura": null,
             "fim_leitura": null,
-            "resenha": null
+            "resumo": null
 
         },
         {
@@ -147,7 +147,7 @@
             "imagem": "lib/recursos/images/dragoes-de-eter-1.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
-            "resenha": null
+            "resumo": null
 
         },
         {
@@ -157,12 +157,12 @@
             "genero_literario": "Romance",
             "numero_paginas": "424",
             "ano_publicacao": "2018",
-            "avaliacao": 5,
+            "avaliacao": "Ótimo",
             "status": "Lido",
             "imagem": "lib/recursos/images/orgulho-e-preconceito.jpeg",
             "inicio_leitura": "28-07-2022",
             "fim_leitura": "19-08-2022",
-            "resenha": "Terminei Orgulho e Preconceito ontem e estou completamente apaixonada! Nunca pensei que um livro do século XIX pudesse ser tão envolvente. A Elizabeth é brilhante, cheia de personalidade, e o Darcy… ai, o Darcy! Fui do desprezo à admiração junto com ela. A escrita da Jane Austen é afiada e cheia de charme me senti parte da história o tempo todo. Já quero reler só pra reviver tudo de novo."
+            "resumo": "Terminei Orgulho e Preconceito ontem e estou completamente apaixonada! Nunca pensei que um livro do século XIX pudesse ser tão envolvente. A Elizabeth é brilhante, cheia de personalidade, e o Darcy… ai, o Darcy! Fui do desprezo à admiração junto com ela. A escrita da Jane Austen é afiada e cheia de charme me senti parte da história o tempo todo. Já quero reler só pra reviver tudo de novo."
 
         },
         {
@@ -172,12 +172,12 @@
             "genero_literario": "Romance",
             "numero_paginas": "368",
             "ano_publicacao": "2023",
-            "avaliacao": 5,
+            "avaliacao": "Ótimo",
             "status": "Lido",
             "imagem": "lib/recursos/images/amor-teoricamente.jpeg",
             "inicio_leitura": "12-05-2024",
             "fim_leitura": "21-05-2024",
-            "resenha": "O livro foi um grande e cômico aprendizado (mesmo não sendo fã no quesito da física teórica, mas foi divertido), o grande aprendizado além da física foi ver que tudo possui uma perspectiva diferente e oculta, que o ser humano não percebe, mas depois de ler o livro, realmente perceber o oculto dos personagens e sua sinceridade, adorei o final, com gelatina e no meio queijo (adoroooo!!!)."
+            "resumo": "O livro foi um grande e cômico aprendizado (mesmo não sendo fã no quesito da física teórica, mas foi divertido), o grande aprendizado além da física foi ver que tudo possui uma perspectiva diferente e oculta, que o ser humano não percebe, mas depois de ler o livro, realmente perceber o oculto dos personagens e sua sinceridade, adorei o final, com gelatina e no meio queijo (adoroooo!!!)."
 
         },
         {
@@ -192,7 +192,7 @@
             "imagem": "lib/recursos/images/hobbit.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
-            "resenha": null
+            "resumo": null
 
         },
         {
@@ -207,7 +207,7 @@
             "imagem": "lib/recursos/images/aquiles.jpg",
             "inicio_leitura": null,
             "fim_leitura": null,
-            "resenha": null
+            "resumo": null
 
         },
         {
@@ -222,7 +222,7 @@
             "imagem": "lib/recursos/images/dracula.jpeg",
             "inicio_leitura": null,
             "fim_leitura": null,
-            "resenha": null
+            "resumo": null
 
         }
 

@@ -9,12 +9,12 @@ class Detalhes extends StatelessWidget {
   final String status;
   final String genero_literario;
   final String ano_publicacao;
-  final String? resenha;
+  final String? resumo;
   final String? inicio_leitura;
   final String? fim_leitura;
   final String imagem;
   final String numero_paginas;
-  final double? avaliacao; // Ex: 3.5 estrelas
+  final double? avaliacao; 
 
   const Detalhes({
     super.key,
@@ -23,7 +23,7 @@ class Detalhes extends StatelessWidget {
     required this.status,
     required this.genero_literario,
     required this.ano_publicacao,
-    this.resenha,
+    this.resumo,
     this.inicio_leitura,
     this.fim_leitura,
     required this.imagem,
@@ -181,7 +181,7 @@ class Detalhes extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              resenha ?? "Você ainda não adicionou uma resenha sobre esse livro.",
+              resumo ?? "Você ainda não adicionou uma resenha sobre esse livro.",
               style: const TextStyle(fontSize: 14),
               textAlign: TextAlign.justify,
             ),
