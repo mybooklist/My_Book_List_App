@@ -3,9 +3,10 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' as root_bundle;
-import 'package:my_book_list/App_colors.dart';
+import 'package:my_book_list/app_colors.dart';
 import 'package:my_book_list/recursos/telas/Detalhes.dart';
 import 'package:my_book_list/recursos/components/Livro_card.dart';
+import 'package:my_book_list/recursos/telas/adicionar_livro.dart';
 
 class Livros extends StatefulWidget {
   const Livros({super.key});
@@ -156,7 +157,7 @@ class _LivrosState extends State<Livros> {
                     color: AppColors.accent, // cor quando selecionado
                     width: 2.0,
                   ),
-                )
+                ),
               ),
               onChanged: (value) {
                 setState(() {
@@ -238,10 +239,13 @@ class _LivrosState extends State<Livros> {
         ],
       ),
 
-      // Botão flutuante
+      // Botão adicionar
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // ação para adicionar livro
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AdicionarLivro()),
+          );
         },
         backgroundColor: AppColors.accent,
         child: const Icon(Icons.add, color: Colors.white),

@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names, unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
-import 'package:my_book_list/App_colors.dart';
+import 'package:my_book_list/app_colors.dart';
 
 class Detalhes extends StatelessWidget {
   final String titulo;
