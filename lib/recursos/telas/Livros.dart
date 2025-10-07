@@ -150,6 +150,13 @@ class _LivrosState extends State<Livros> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                    color: AppColors.accent, // cor quando selecionado
+                    width: 2.0,
+                  ),
+                )
               ),
               onChanged: (value) {
                 setState(() {
