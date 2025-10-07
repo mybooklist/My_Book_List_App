@@ -1,4 +1,10 @@
+// ignore_for_file: unused_field, non_constant_identifier_names, unused_element
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:my_book_list/app_colors.dart';
 
 class AdicionarLivro extends StatefulWidget {
   const AdicionarLivro({super.key});
@@ -13,7 +19,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
   String? _status;
   String? _genero_literario;
   String? _avaliacao;
-  String? _imagem;
+  File? _imagemSelecionada;
   String _resumo = "";
 
   final _tituloController = TextEditingController();
@@ -32,14 +38,14 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
     'Suspense e Mistério',
     'Terror',
     'Crime e Investigação',
-    'Literatura Estrangeira'
+    'Literatura Estrangeira',
   ];
   final List<String> _avaliacoes = [
     'Ótimo',
     'Muito bom',
     'Bom',
     'Regular',
-    'Ruim'
+    'Ruim',
   ];
 
   Future<void> _selecionarData(bool inicio) async {
@@ -56,6 +62,16 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
         } else {
           _fim_leitura = dataSelecionada;
         }
+      });
+    }
+  }
+
+  Future<void> _selecionarImagem() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? imagem = await picker.pickImage(source: ImageSource.gallery);
+    if (imagem != null) {
+      setState(() {
+        _imagemSelecionada = File(imagem.path);
       });
     }
   }
@@ -99,18 +115,24 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => _selecionarData(true),
-                      child: Text(_inicio_leitura == null
-                          ? 'Início da Leitura'
-                          : '${_inicio_leitura!.day}/${_inicio_leitura!.month}/${_inicio_leitura!.year}'),
+                      child: Text(
+                        _inicio_leitura == null
+                            ? 'Início da Leitura'
+                            : '${_inicio_leitura!.day}/${_inicio_leitura!.month}/${_inicio_leitura!.year}',
+                        style: TextStyle(color: AppColors.textPrimary),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => _selecionarData(false),
-                      child: Text(_fim_leitura == null
-                          ? 'Fim da Leitura'
-                          : '${_fim_leitura!.day}/${_fim_leitura!.month}/${_fim_leitura!.year}'),
+                      child: Text(
+                        _fim_leitura == null
+                            ? 'Fim da Leitura'
+                            : '${_fim_leitura!.day}/${_fim_leitura!.month}/${_fim_leitura!.year}',
+                        style: TextStyle(color: AppColors.textPrimary),
+                      ),
                     ),
                   ),
                 ],
@@ -128,11 +150,14 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      decoration:
-                          const InputDecoration(labelText: 'Status da Leitura'),
+                      decoration: const InputDecoration(
+                        labelText: 'Status da Leitura',
+                      ),
                       value: _status,
                       items: _statusOptions
-                          .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                          .map(
+                            (s) => DropdownMenuItem(value: s, child: Text(s)),
+                          )
                           .toList(),
                       onChanged: (v) => setState(() => _status = v),
                     ),
@@ -141,8 +166,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                   Expanded(
                     child: TextFormField(
                       controller: _numero_paginasController,
-                      decoration:
-                          const InputDecoration(labelText: 'Páginas'),
+                      decoration: const InputDecoration(labelText: 'Páginas'),
                       keyboardType: TextInputType.number,
                     ),
                   ),
@@ -152,11 +176,14 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      decoration:
-                          const InputDecoration(labelText: 'Gênero Literário'),
+                      decoration: const InputDecoration(
+                        labelText: 'Gênero Literário',
+                      ),
                       value: _genero_literario,
                       items: _generos
-                          .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                          .map(
+                            (g) => DropdownMenuItem(value: g, child: Text(g)),
+                          )
                           .toList(),
                       onChanged: (v) => setState(() => _genero_literario = v),
                     ),
@@ -173,18 +200,44 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
               ),
               const SizedBox(height: 16),
               OutlinedButton.icon(
-                onPressed: () {
-                  // Aqui você pode implementar o seletor de imagem futuramente
+                onPressed: () async {
+                  final ImagePicker picker = ImagePicker();
+                  final XFile? imagem = await picker.pickImage(
+                    source: ImageSource.gallery,
+                  );
+                  if (imagem != null) {
+                    setState(() {
+                      _imagemSelecionada = File(imagem.path);
+                    });
+                  }
                 },
-                icon: const Icon(Icons.image_outlined),
-                label: const Text('Selecionar imagem de capa (PNG, JPG)'),
+                icon: const Icon(
+                  Icons.image_outlined,
+                  color: AppColors.textPrimary,
+                ),
+                label: const Text(
+                  'Selecionar imagem de capa (PNG, JPG)',
+                  style: TextStyle(color: AppColors.textPrimary),
+                ),
               ),
+              if (_imagemSelecionada != null) ...[
+                const SizedBox(height: 12),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.file(
+                    _imagemSelecionada!,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+
               const SizedBox(height: 16),
               TextFormField(
                 maxLength: 700,
                 maxLines: 5,
                 decoration: const InputDecoration(
-                  labelText: 'Faça uma Resenha sobre esse livro',
+                  labelText: 'Faça um Resumo sobre esse livro',
                   alignLabelWithHint: true,
                   border: OutlineInputBorder(),
                 ),
@@ -194,20 +247,41 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // Aqui salva o livro
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Livro salvo com sucesso!')),
-                    );
+                    final novoLivro = {
+                      'titulo': _tituloController.text,
+                      'autor': _autorController.text,
+                      'status': _status ?? 'Sem status',
+                      'genero_literario': _genero_literario ?? 'Sem gênero',
+                      'ano_publicacao': _ano_publicacaoController.text,
+                      'numero_paginas': _numero_paginasController.text,
+                      'avaliacao': _avaliacao ?? 'Sem avaliação',
+                      'inicio_leitura': _inicio_leitura != null
+                          ? '${_inicio_leitura!.day}/${_inicio_leitura!.month}/${_inicio_leitura!.year}'
+                          : '',
+                      'fim_leitura': _fim_leitura != null
+                          ? '${_fim_leitura!.day}/${_fim_leitura!.month}/${_fim_leitura!.year}'
+                          : '',
+                      'imagem': _imagemSelecionada?.path ?? '',
+                      'resumo': _resumo,
+                    };
+
+                    Navigator.pop(context, novoLivro); // envia o livro de volta
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  backgroundColor: AppColors.accent,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 14,
+                  ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                child: const Text('Salvar Livro'),
+                child: const Text(
+                  'Salvar Livro',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),

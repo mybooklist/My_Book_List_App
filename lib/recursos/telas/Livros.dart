@@ -41,7 +41,7 @@ class _LivrosState extends State<Livros> {
 
     setState(() => isLoadingMore = true);
 
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 800), () {
       final start = currentPage * pageSize;
       final end = start + pageSize;
       final novosLivros = livros.sublist(
@@ -117,11 +117,11 @@ class _LivrosState extends State<Livros> {
         title: const Text(
           'My Book List',
           style: TextStyle(
-            color: AppColors.accent,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.accent,
         centerTitle: true,
         elevation: 0,
       ),
@@ -241,11 +241,22 @@ class _LivrosState extends State<Livros> {
 
       // Botão adicionar
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final novoLivro = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AdicionarLivro()),
           );
+
+          if (novoLivro != null) {
+            setState(() {
+              livros.insert(0, novoLivro);
+              livrosVisiveis.insert(0, novoLivro);
+            });
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Livro adicionado com sucesso!')),
+            );
+          }
         },
         backgroundColor: AppColors.accent,
         child: const Icon(Icons.add, color: Colors.white),
