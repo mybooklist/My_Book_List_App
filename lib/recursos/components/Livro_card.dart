@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class Livro_card extends StatelessWidget {
@@ -15,6 +17,14 @@ class Livro_card extends StatelessWidget {
     required this.status,
     this.imagem,
   });
+
+  Widget _buildImagem(String path) {
+    if (path.startsWith('lib/recursos/images')) {
+      return Image.asset(path, fit: BoxFit.cover);
+    } else {
+      return Image.file(File(path), fit: BoxFit.cover);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +43,7 @@ class Livro_card extends StatelessWidget {
                 top: Radius.circular(12),
               ),
               child: imagem != null
-                  ? Image.asset(imagem!, fit: BoxFit.cover)
+                  ? _buildImagem(imagem!)
                   : Container(
                       color: Colors.grey[300],
                       child: const Icon(Icons.image, size: 50),
