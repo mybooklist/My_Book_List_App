@@ -108,17 +108,20 @@ class _LivrosState extends State<Livros> {
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Image.asset(
-            'lib/recursos/images/logo.png', 
-            height: 30,
-            width: 30,
+          child: SizedBox(
+            width: 60, // aumenta a largura disponível
+            height: 60, // aumenta a altura disponível
+            child: Image.asset(
+              'lib/recursos/images/logo.png',
+              fit: BoxFit.contain, // garante que a imagem se ajuste
+            ),
           ),
         ),
         title: const Text(
           'My Book List',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppColors.accent,
+        backgroundColor: AppColors.secondary,
         centerTitle: true,
         elevation: 0,
       ),
@@ -151,7 +154,7 @@ class _LivrosState extends State<Livros> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(
-                    color: AppColors.accent, // cor quando selecionado
+                    color: AppColors.secondary, // cor quando selecionado
                     width: 2.0,
                   ),
                 ),
@@ -270,7 +273,7 @@ class _LivrosState extends State<Livros> {
             );
           }
         },
-        backgroundColor: AppColors.accent,
+        backgroundColor: AppColors.secondary,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
@@ -281,7 +284,7 @@ class _LivrosState extends State<Livros> {
       avatar: Icon(
         icon,
         size: 20,
-        color: selectedFilter == label ? Colors.white : AppColors.accent,
+        color: selectedFilter == label ? Colors.white : AppColors.secondary,
       ),
       label: Text(
         label,
@@ -296,7 +299,7 @@ class _LivrosState extends State<Livros> {
         });
       },
       backgroundColor: Colors.grey[200], // cor de fundo quando não selecionado
-      selectedColor: AppColors.accent, // cor de fundo quando selecionado
+      selectedColor: AppColors.secondary, // cor de fundo quando selecionado
       checkmarkColor: Colors.transparent, // garante que não apareça check
       showCheckmark: false, // remove o check
       elevation: 0, // remove sombra

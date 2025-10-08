@@ -276,7 +276,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.accent,
+                  backgroundColor: AppColors.secondary,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 14,
