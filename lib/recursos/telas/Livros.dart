@@ -109,7 +109,7 @@ class _LivrosState extends State<Livros> {
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image.asset(
-            'lib/recursos/images/my-book-list.png', // substitua pelo seu caminho
+            'lib/recursos/images/logo.png', 
             height: 30,
             width: 30,
           ),
