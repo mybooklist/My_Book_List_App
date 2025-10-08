@@ -116,10 +116,7 @@ class _LivrosState extends State<Livros> {
         ),
         title: const Text(
           'My Book List',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.accent,
         centerTitle: true,
@@ -190,8 +187,8 @@ class _LivrosState extends State<Livros> {
                           if (index < livrosFiltrados.length) {
                             final livro = livrosFiltrados[index];
                             return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
+                              onTap: () async {
+                                final resultado = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => Detalhes(
@@ -218,6 +215,21 @@ class _LivrosState extends State<Livros> {
                                     ),
                                   ),
                                 );
+
+                                if (resultado != null) {
+                                  if (resultado['acao'] == 'excluir') {
+                                    setState(() {
+                                      livros.remove(livro);
+                                    });
+                                  } else if (resultado['acao'] == 'editar') {
+                                    setState(() {
+                                      final index = livros.indexOf(livro);
+                                      if (index != -1) {
+                                        livros[index] = resultado['livro'];
+                                      }
+                                    });
+                                  }
+                                }
                               },
                               child: Livro_card(
                                 titulo: livro['titulo'],

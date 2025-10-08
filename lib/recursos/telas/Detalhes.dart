@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_book_list/app_colors.dart';
+import 'package:my_book_list/recursos/telas/adicionar_livro.dart';
 
 class Detalhes extends StatelessWidget {
   final String titulo;
@@ -98,10 +99,75 @@ class Detalhes extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: const [
-          Icon(Icons.keyboard_control_rounded),
-          SizedBox(width: 16),
-        ],
+          actions: [
+    PopupMenuButton<String>(
+      icon: const Icon(Icons.keyboard_control_rounded),
+      onSelected: (value) {
+        if (value == 'editar') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AdicionarLivro(
+                livroExistente: {
+                  'titulo': titulo,
+                  'autor': autor,
+                  'status': status,
+                  'genero_literario': genero_literario,
+                  'ano_publicacao': ano_publicacao,
+                  'resumo': resumo,
+                  'inicio_leitura': inicio_leitura,
+                  'fim_leitura': fim_leitura,
+                  'imagem': imagem,
+                  'numero_paginas': numero_paginas,
+                  'avaliacao': avaliacao,
+                },
+              ),
+            ),
+          ).then((livroEditado) {
+            if (livroEditado != null) {
+              Navigator.pop(context, {
+                'acao': 'editar',
+                'livro': livroEditado,
+              });
+            }
+          });
+        } else if (value == 'excluir') {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Excluir livro'),
+              content: const Text('Tem certeza que deseja excluir este livro?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancelar'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // fecha o diálogo
+                    Navigator.pop(context, {'acao': 'excluir'}); // volta com ação
+                  },
+                  child: const Text('Excluir'),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: 'editar',
+          child: Text('Editar'),
+        ),
+        const PopupMenuItem(
+          value: 'excluir',
+          child: Text('Excluir'),
+        ),
+      ],
+    ),
+    const SizedBox(width: 8),
+  ],
+
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

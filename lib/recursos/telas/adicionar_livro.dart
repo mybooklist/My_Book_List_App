@@ -7,7 +7,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:my_book_list/app_colors.dart';
 
 class AdicionarLivro extends StatefulWidget {
-  const AdicionarLivro({super.key});
+  final Map<String, dynamic>? livroExistente;
+
+
+  const AdicionarLivro({
+    super.key,
+    this.livroExistente,
+  });
+
 
   @override
   State<AdicionarLivro> createState() => _AdicionarLivroState();
