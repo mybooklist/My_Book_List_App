@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field, non_constant_identifier_names, unused_element
+// ignore_for_file: unused_field, non_constant_identifier_names, unused_element, file_names, avoid_print, use_build_context_synchronously, deprecated_member_use
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -108,52 +108,49 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
   ];
 
   // Método para salvar livro no Shared Preferences
-  Future<void> _salvarLivroNoSharedPreferences(
-    Map<String, dynamic> livro,
-  ) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-
-      // Recupera a lista atual de livros
-      final String? livrosJson = prefs.getString('livros');
-      List<dynamic> livrosList = [];
-
-      if (livrosJson != null && livrosJson.isNotEmpty) {
-        livrosList = json.decode(livrosJson);
-      }
-
-      // Verifica se é edição ou novo livro
-      if (widget.livroExistente != null) {
-        // Modo edição - encontra o livro pelo ID e atualiza
-        final String livroId = widget.livroExistente!['id'];
-        final int index = livrosList.indexWhere(
-          (livro) => livro['id'] == livroId,
-        );
-
-        if (index != -1) {
-          livrosList[index] = {
-            ...livrosList[index],
-            ...livro, // Mantém o ID original e atualiza outros campos
-          };
-        }
-      } else {
-        // Modo adição - cria novo livro com ID único
-        final novoLivroComId = {
-          'id': DateTime.now().millisecondsSinceEpoch.toString(), // ID único
-          ...livro,
-        };
-        livrosList.add(novoLivroComId);
-      }
-
-      // Salva a lista atualizada no Shared Preferences
-      await prefs.setString('livros', json.encode(livrosList));
-
-      print('Livro salvo com sucesso! Total de livros: ${livrosList.length}');
-    } catch (e) {
-      print('Erro ao salvar livro: $e');
-      throw Exception('Erro ao salvar livro: $e');
+Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    
+    // Recupera a lista atual de livros
+    final String? livrosJson = prefs.getString('livros');
+    List<dynamic> livrosList = [];
+    
+    if (livrosJson != null && livrosJson.isNotEmpty) {
+      livrosList = json.decode(livrosJson);
     }
+    
+    // Verifica se é edição ou novo livro
+    if (widget.livroExistente != null) {
+      // Modo edição - encontra o livro pelo ID e atualiza
+      final String livroId = widget.livroExistente!['id'];
+      final int index = livrosList.indexWhere((livro) => livro['id'] == livroId);
+      
+      if (index != -1) {
+        livrosList[index] = {
+          ...livrosList[index],
+          ...livro, // Mantém o ID original e atualiza outros campos
+        };
+      }
+    } else {
+      // Modo adição - cria novo livro com ID único
+      final novoLivroComId = {
+        'id': DateTime.now().millisecondsSinceEpoch.toString(), // ID único
+        ...livro,
+      };
+      livrosList.add(novoLivroComId); // ADICIONA à lista, não substitui
+    }
+    
+    // Salva a lista atualizada no Shared Preferences
+    await prefs.setString('livros', json.encode(livrosList));
+    
+    print('✅ Livro salvo com sucesso! Total de livros: ${livrosList.length}');
+    
+  } catch (e) {
+    print('❌ Erro ao salvar livro: $e');
+    throw Exception('Erro ao salvar livro: $e');
   }
+}
 
   // Método para carregar livros do Shared Preferences (útil para debug)
   Future<void> _carregarLivrosDoSharedPreferences() async {

@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, non_constant_identifier_names, unnecessary_string_interpolations
+// ignore_for_file: file_names, non_constant_identifier_names, unnecessary_string_interpolations, use_build_context_synchronously, unnecessary_this, avoid_print
 
 import 'dart:io';
 

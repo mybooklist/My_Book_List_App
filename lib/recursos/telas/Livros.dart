@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, avoid_print, unused_element
+// ignore_for_file: library_private_types_in_public_api, avoid_print, unused_element, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -239,20 +239,18 @@ class _LivrosState extends State<Livros> {
   }
 
   // Método para adicionar um novo livro
-  void _adicionarLivro(Map<String, dynamic> novoLivro) {
-    final livroComId = {
-      ...novoLivro,
-      'fonte': 'usuario', // Marca como livro de usuário
-    };
-
-    setState(() {
-      livros.insert(0, livroComId);
-      livrosVisiveis.insert(0, livroComId);
-    });
-
-    // Salva apenas livros de usuário no Shared Preferences
-    _salvarTodosOsLivrosNoSharedPreferences();
-  }
+void _adicionarLivro(Map<String, dynamic> novoLivro) {
+  setState(() {
+    livros.insert(0, novoLivro); // ADICIONA à lista local
+    
+    // Resetar a lista visível e recarregar com o filtro atual
+    livrosVisiveis = getFiltroLivros().take(pageSize).toList();
+    currentPage = 1;
+  });
+  
+  // Salva as alterações no Shared Preferences
+  _salvarTodosOsLivrosNoSharedPreferences();
+}
 
   // Método para recarregar os livros (útil para debug)
   Future<void> _recarregarLivros() async {
@@ -261,6 +259,7 @@ class _LivrosState extends State<Livros> {
     });
     await _carregarTodosOsLivros();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -284,14 +283,14 @@ class _LivrosState extends State<Livros> {
         backgroundColor: AppColors.secondary,
         centerTitle: true,
         elevation: 0,
-        actions: [
+        /*actions: [
           // Botão para recarregar (debug)
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white),
             onPressed: _recarregarLivros,
             tooltip: 'Recarregar livros',
           ),
-        ],
+        ],*/
       ),
       body: Column(
         children: [
