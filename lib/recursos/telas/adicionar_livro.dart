@@ -144,10 +144,10 @@ Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
     // Salva a lista atualizada no Shared Preferences
     await prefs.setString('livros', json.encode(livrosList));
     
-    print('✅ Livro salvo com sucesso! Total de livros: ${livrosList.length}');
+    print('Livro salvo com sucesso! Total de livros: ${livrosList.length}');
     
   } catch (e) {
-    print('❌ Erro ao salvar livro: $e');
+    print('Erro ao salvar livro: $e');
     throw Exception('Erro ao salvar livro: $e');
   }
 }

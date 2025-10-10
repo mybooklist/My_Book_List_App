@@ -80,7 +80,7 @@ class _LivrosState extends State<Livros> {
       });
 
       print(
-        '✅ ${livrosJson.length} livros do JSON + ${livrosSalvos.length} livros salvos = ${livros.length} livros totais',
+        '${livrosJson.length} livros do JSON + ${livrosSalvos.length} livros salvos = ${livros.length} livros totais',
       );
     } catch (e) {
       print('❌ Erro ao carregar livros: $e');
@@ -111,7 +111,7 @@ class _LivrosState extends State<Livros> {
         };
       }).toList();
     } catch (e) {
-      print('❌ Erro ao carregar JSON: $e');
+      print('Erro ao carregar JSON: $e');
       return [];
     }
   }
@@ -136,7 +136,7 @@ class _LivrosState extends State<Livros> {
       }
       return [];
     } catch (e) {
-      print('❌ Erro ao carregar do Shared Preferences: $e');
+      print('Erro ao carregar do Shared Preferences: $e');
       return [];
     }
   }
@@ -153,10 +153,10 @@ class _LivrosState extends State<Livros> {
 
       await prefs.setString('livros', json.encode(livrosUsuario));
       print(
-        '💾 ${livrosUsuario.length} livros de usuário salvos no Shared Preferences',
+        '${livrosUsuario.length} livros de usuário salvos no Shared Preferences',
       );
     } catch (e) {
-      print('❌ Erro ao salvar livros: $e');
+      print('Erro ao salvar livros: $e');
     }
   }
 
