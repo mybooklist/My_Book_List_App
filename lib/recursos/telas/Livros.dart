@@ -8,6 +8,8 @@ import 'package:my_book_list/app_colors.dart';
 import 'package:my_book_list/recursos/telas/Detalhes.dart';
 import 'package:my_book_list/recursos/components/Livro_card.dart';
 import 'package:my_book_list/recursos/telas/adicionar_livro.dart';
+import 'package:my_book_list/autenticacao.dart';
+import 'package:my_book_list/recursos/telas/tela_login.dart';
 
 class Livros extends StatefulWidget {
   const Livros({super.key});
@@ -17,6 +19,9 @@ class Livros extends StatefulWidget {
 }
 
 class _LivrosState extends State<Livros> {
+  final Autenticacao _autenticacao = Autenticacao();
+  bool _estaLogado = false;
+
   List<dynamic> livros = [];
   String selectedFilter = 'Todos';
   bool isLoading = true;
@@ -27,6 +32,7 @@ class _LivrosState extends State<Livros> {
   void initState() {
     super.initState();
     _carregarTodosOsLivros();
+    _checkAuthStatus();
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -36,6 +42,13 @@ class _LivrosState extends State<Livros> {
       }
     });
   }
+
+  Future<void> _checkAuthStatus() async {
+  final loggedIn = await _autenticacao.estaLogado();
+  setState(() {
+    _estaLogado = loggedIn;
+  });
+}
 
   // Método para carregar todos os livros (JSON + Shared Preferences)
   Future<void> _carregarTodosOsLivros() async {
@@ -260,6 +273,72 @@ void _adicionarLivro(Map<String, dynamic> novoLivro) {
     await _carregarTodosOsLivros();
   }
 
+  // No _fazerLogin (versão sem método helper)
+Future<void> _fazerLogin() async {
+  try {
+    final emailUsuario = await _autenticacao.entrarComGoogle();
+    if (emailUsuario != null && mounted) {
+      setState(() {
+        _estaLogado = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Login realizado com sucesso!',
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height * 0.4,
+            left: 50,
+            right: 50,
+          ),
+        ),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Erro ao fazer login: $e',
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height * 0.4,
+          left: 50,
+          right: 50,
+        ),
+      ),
+    );
+  }
+}
+
+// No _logout (versão sem método helper)
+Future<void> _logout() async {
+  await _autenticacao.signOut();
+  setState(() {
+    _estaLogado = false;
+  });
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: const Text(
+        'Logout realizado!',
+        textAlign: TextAlign.center,
+      ),
+      backgroundColor: Colors.blue,
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.height * 0.4,
+        left: 50,
+        right: 50,
+      ),
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -283,14 +362,16 @@ void _adicionarLivro(Map<String, dynamic> novoLivro) {
         backgroundColor: AppColors.secondary,
         centerTitle: true,
         elevation: 0,
-        /*actions: [
-          // Botão para recarregar (debug)
-          IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
-            onPressed: _recarregarLivros,
-            tooltip: 'Recarregar livros',
-          ),
-        ],*/
+        actions: [
+    IconButton(
+      icon: Icon(
+        _estaLogado ? Icons.logout : Icons.login,
+        color: Colors.white,
+      ),
+      onPressed: _estaLogado ? _logout : _fazerLogin, // Métodos ajustados
+      tooltip: _estaLogado ? 'Sair' : 'Entrar',
+    ),
+  ],
       ),
       body: Column(
         children: [
@@ -483,7 +564,8 @@ void _adicionarLivro(Map<String, dynamic> novoLivro) {
       ),
 
       // Botão adicionar
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _estaLogado
+    ? FloatingActionButton(
         onPressed: () async {
           final novoLivro = await Navigator.push(
             context,
@@ -502,7 +584,8 @@ void _adicionarLivro(Map<String, dynamic> novoLivro) {
         },
         backgroundColor: AppColors.secondary,
         child: const Icon(Icons.add, color: Colors.white),
-      ),
+      )
+    : null,
     );
   }
 

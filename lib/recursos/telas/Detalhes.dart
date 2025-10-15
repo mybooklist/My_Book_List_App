@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:my_book_list/app_colors.dart';
 import 'package:my_book_list/recursos/telas/adicionar_livro.dart';
+import 'package:my_book_list/autenticacao.dart';
+import 'package:my_book_list/recursos/telas/tela_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -22,6 +24,22 @@ class Detalhes extends StatefulWidget {
 
 class _DetalhesState extends State<Detalhes> {
   // Converte o livro para Map<String, dynamic> para evitar erros de tipo
+  final Autenticacao _autenticacao = Autenticacao();
+  bool _estaLogado = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _verificarAutenticacao();
+  }
+
+  Future<void> _verificarAutenticacao() async {
+    final logado = await _autenticacao.estaLogado();
+    setState(() {
+      _estaLogado = logado;
+    });
+  }
+
   Map<String, dynamic> get livro {
     final Map<String, dynamic> converted = {};
     widget.livro.forEach((key, value) {
@@ -290,22 +308,23 @@ class _DetalhesState extends State<Detalhes> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.keyboard_control_rounded),
-            onSelected: (value) {
-              if (value == 'editar') {
-                _editarLivro();
-              } else if (value == 'excluir') {
-                _confirmarExclusao();
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: 'editar', child: Text('Editar')),
-              const PopupMenuItem(value: 'excluir', child: Text('Excluir')),
-            ],
-          ),
-          const SizedBox(width: 8),
-        ],
+  if (_estaLogado) 
+    PopupMenuButton<String>(
+      icon: const Icon(Icons.keyboard_control_rounded),
+      onSelected: (value) {
+        if (value == 'editar') {
+          _editarLivro();
+        } else if (value == 'excluir') {
+          _confirmarExclusao();
+        }
+      },
+      itemBuilder: (context) => [
+        const PopupMenuItem(value: 'editar', child: Text('Editar')),
+        const PopupMenuItem(value: 'excluir', child: Text('Excluir')),
+      ],
+    ),
+  const SizedBox(width: 8),
+],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
