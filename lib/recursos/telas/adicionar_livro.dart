@@ -37,33 +37,21 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
   void initState() {
     super.initState();
 
-    // Define um valor padrão inicial
-  //_status = 'Quero Ler'; 
-
-    
     if (widget.livroExistente != null) {
       _tituloController.text = widget.livroExistente!['titulo'] ?? '';
       _autorController.text = widget.livroExistente!['autor'] ?? '';
-      _numero_paginasController.text =
-          widget.livroExistente!['numero_paginas'] ?? '';
-      _ano_publicacaoController.text =
-          widget.livroExistente!['ano_publicacao'] ?? '';
+      _numero_paginasController.text = widget.livroExistente!['numero_paginas'] ?? '';
+      _ano_publicacaoController.text = widget.livroExistente!['ano_publicacao'] ?? '';
 
       // CORREÇÃO: Garantir que os valores existem nas listas
       final statusExistente = widget.livroExistente!['status'];
-      _status = _statusOptions.contains(statusExistente)
-          ? statusExistente
-          : null;
+      _status = _statusOptions.contains(statusExistente) ? statusExistente : 'Quero Ler';
 
       final generoExistente = widget.livroExistente!['genero_literario'];
-      _genero_literario = _generos.contains(generoExistente)
-          ? generoExistente
-          : null;
+      _genero_literario = _generos.contains(generoExistente) ? generoExistente : 'Romance';
 
       final avaliacaoExistente = widget.livroExistente!['avaliacao'];
-      _avaliacao = _avaliacoes.contains(avaliacaoExistente)
-          ? avaliacaoExistente
-          : null;
+      _avaliacao = _avaliacoes.contains(avaliacaoExistente) ? avaliacaoExistente : 'Bom';
 
       _resumo = widget.livroExistente!['resumo'] ?? '';
 
@@ -86,6 +74,11 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
       if ((widget.livroExistente!['imagem'] ?? '').isNotEmpty) {
         _imagemSelecionada = File(widget.livroExistente!['imagem']);
       }
+    } else {
+      // Valores padrão para novo livro
+      _status = 'Quero Ler';
+      _genero_literario = 'Romance';
+      _avaliacao = 'Bom';
     }
   }
 
@@ -107,68 +100,67 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
     'Ruim',
   ];
 
-  // Método para salvar livro no Shared Preferences
-Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
-  try {
-    final prefs = await SharedPreferences.getInstance();
-    
-    // Recupera a lista atual de livros
-    final String? livrosJson = prefs.getString('livros');
-    List<dynamic> livrosList = [];
-    
-    if (livrosJson != null && livrosJson.isNotEmpty) {
-      livrosList = json.decode(livrosJson);
-    }
-    
-    // Verifica se é edição ou novo livro
-    if (widget.livroExistente != null) {
-      // Modo edição - encontra o livro pelo ID e atualiza
-      final String livroId = widget.livroExistente!['id'];
-      final int index = livrosList.indexWhere((livro) => livro['id'] == livroId);
-      
-      if (index != -1) {
-        livrosList[index] = {
-          ...livrosList[index],
-          ...livro, // Mantém o ID original e atualiza outros campos
-        };
-      }
-    } else {
-      // Modo adição - cria novo livro com ID único
-      final novoLivroComId = {
-        'id': DateTime.now().millisecondsSinceEpoch.toString(), // ID único
-        ...livro,
-      };
-      livrosList.add(novoLivroComId); // ADICIONA à lista, não substitui
-    }
-    
-    // Salva a lista atualizada no Shared Preferences
-    await prefs.setString('livros', json.encode(livrosList));
-    
-    print('Livro salvo com sucesso! Total de livros: ${livrosList.length}');
-    
-  } catch (e) {
-    print('Erro ao salvar livro: $e');
-    throw Exception('Erro ao salvar livro: $e');
-  }
-}
-
-  // Método para carregar livros do Shared Preferences (útil para debug)
-  Future<void> _carregarLivrosDoSharedPreferences() async {
+  // MÉTODO CORRETO para salvar livro no Shared Preferences
+  Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      
+      // Recupera a lista atual de livros
       final String? livrosJson = prefs.getString('livros');
-
-      if (livrosJson != null) {
-        final List<dynamic> livrosList = json.decode(livrosJson);
-        print('Livros carregados: ${livrosList.length}');
-        for (var livro in livrosList) {
-          print('Livro: ${livro['titulo']} - ID: ${livro['id']}');
+      List<dynamic> livrosList = [];
+      
+      if (livrosJson != null && livrosJson.isNotEmpty) {
+        livrosList = json.decode(livrosJson);
+      }
+      
+      print('🔍 DEBUG _salvarLivroNoSharedPreferences:');
+      print('   - Livro a salvar: ${livro['titulo']} (ID: ${livro['id']})');
+      print('   - Livros existentes: ${livrosList.length}');
+      print('   - Modo: ${widget.livroExistente != null ? "EDIÇÃO" : "NOVO"}');
+      
+      // Verifica se é edição ou novo livro
+      if (widget.livroExistente != null) {
+        // MODO EDIÇÃO
+        final String livroId = livro['id'];
+        print('   - Procurando ID: $livroId para editar');
+        
+        final int index = livrosList.indexWhere((l) => l['id'].toString() == livroId.toString());
+        print('   - Index encontrado: $index');
+        
+        if (index != -1) {
+          // ATUALIZA livro existente
+          livrosList[index] = {
+            ...livrosList[index], // Mantém campos existentes
+            ...livro,             // Aplica atualizações
+          };
+          print('   ✅ LIVRO ATUALIZADO na posição $index');
+        } else {
+          // Se não encontrou, ADICIONA como novo
+          print('   ⚠️ Livro não encontrado, ADICIONANDO COMO NOVO');
+          livrosList.add({
+            ...livro,
+            'fonte': 'usuario',
+          });
         }
       } else {
-        print('Nenhum livro salvo encontrado');
+        // MODO NOVO LIVRO
+        print('   ➕ ADICIONANDO NOVO LIVRO');
+        final novoLivroCompleto = {
+          ...livro,
+          'fonte': 'usuario',
+          'id': DateTime.now().millisecondsSinceEpoch.toString(), // Garante ID único
+        };
+        livrosList.add(novoLivroCompleto);
       }
+      
+      // Salva a lista atualizada
+      await prefs.setString('livros', json.encode(livrosList));
+      
+      print('   💾 LISTA SALVA com ${livrosList.length} livros');
+      
     } catch (e) {
-      print('Erro ao carregar livros: $e');
+      print('❌ ERRO em _salvarLivroNoSharedPreferences: $e');
+      throw Exception('Erro ao salvar livro: $e');
     }
   }
 
@@ -200,7 +192,7 @@ Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
     }
   }
 
-  // Método para salvar o livro
+  // MÉTODO PRINCIPAL para salvar o livro
   Future<void> _salvarLivro() async {
     if (_formKey.currentState!.validate()) {
       try {
@@ -208,18 +200,20 @@ Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) =>
-              const Center(child: CircularProgressIndicator()),
+          builder: (context) => const Center(child: CircularProgressIndicator()),
         );
 
+        print('📝 Preparando livro para salvar...');
+        
+        // Cria o mapa do livro
         final Map<String, dynamic> livro = {
           'titulo': _tituloController.text,
           'autor': _autorController.text,
           'status': _status ?? 'Quero Ler',
-          'genero_literario': _genero_literario ?? 'Sem gênero',
+          'genero_literario': _genero_literario ?? 'Romance',
           'ano_publicacao': _ano_publicacaoController.text,
           'numero_paginas': _numero_paginasController.text,
-          'avaliacao': _avaliacao ?? 'Sem avaliação',
+          'avaliacao': _avaliacao ?? 'Bom',
           'inicio_leitura': _inicio_leitura != null
               ? '${_inicio_leitura!.day}/${_inicio_leitura!.month}/${_inicio_leitura!.year}'
               : '',
@@ -233,6 +227,11 @@ Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
         // Se for edição, mantém o ID original
         if (widget.livroExistente != null) {
           livro['id'] = widget.livroExistente!['id'];
+          print('   🔄 Editando livro ID: ${livro['id']}');
+        } else {
+          // Se for novo livro, gera um ID único
+          livro['id'] = DateTime.now().millisecondsSinceEpoch.toString();
+          print('   ➕ Novo livro ID: ${livro['id']}');
         }
 
         // Salva no Shared Preferences
@@ -253,11 +252,9 @@ Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
           ),
         );
 
-        // Para debug - carrega os livros salvos
-        await _carregarLivrosDoSharedPreferences();
-
-        // Retorna para a tela anterior
+        // Retorna para a tela anterior com o livro
         Navigator.pop(context, livro);
+
       } catch (e) {
         // Fecha o loading
         Navigator.pop(context);
@@ -299,8 +296,7 @@ Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
               TextFormField(
                 controller: _tituloController,
                 decoration: const InputDecoration(labelText: 'Título do Livro'),
-                validator: (v) =>
-                    v == null || v.isEmpty ? 'Informe o título' : null,
+                validator: (v) => v == null || v.isEmpty ? 'Informe o título' : null,
               ),
               TextFormField(
                 controller: _autorController,
@@ -335,7 +331,6 @@ Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
                 ],
               ),
               const SizedBox(height: 8),
-              // Avaliação
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Avaliação'),
                 value: _avaliacao,
@@ -347,16 +342,13 @@ Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
               Row(
                 children: [
                   Expanded(
-                    child: // Status da Leitura
-                    DropdownButtonFormField<String>(
+                    child: DropdownButtonFormField<String>(
                       decoration: const InputDecoration(
                         labelText: 'Status da Leitura',
                       ),
                       value: _status,
                       items: _statusOptions
-                          .map(
-                            (s) => DropdownMenuItem(value: s, child: Text(s)),
-                          )
+                          .map((s) => DropdownMenuItem(value: s, child: Text(s)))
                           .toList(),
                       onChanged: (v) => setState(() => _status = v),
                     ),
@@ -374,16 +366,13 @@ Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
               Row(
                 children: [
                   Expanded(
-                    child: // Gênero Literário
-                    DropdownButtonFormField<String>(
+                    child: DropdownButtonFormField<String>(
                       decoration: const InputDecoration(
                         labelText: 'Gênero Literário',
                       ),
                       value: _genero_literario,
                       items: _generos
-                          .map(
-                            (g) => DropdownMenuItem(value: g, child: Text(g)),
-                          )
+                          .map((g) => DropdownMenuItem(value: g, child: Text(g)))
                           .toList(),
                       onChanged: (v) => setState(() => _genero_literario = v),
                     ),

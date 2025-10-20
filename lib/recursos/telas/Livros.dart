@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, avoid_print, unused_element, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, avoid_print, unused_element, use_build_context_synchronously, await_only_futures
 
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -9,7 +9,7 @@ import 'package:my_book_list/recursos/telas/Detalhes.dart';
 import 'package:my_book_list/recursos/components/Livro_card.dart';
 import 'package:my_book_list/recursos/telas/adicionar_livro.dart';
 import 'package:my_book_list/autenticacao.dart';
-import 'package:my_book_list/recursos/telas/tela_login.dart';
+
 
 class Livros extends StatefulWidget {
   const Livros({super.key});
@@ -44,11 +44,11 @@ class _LivrosState extends State<Livros> {
   }
 
   Future<void> _checkAuthStatus() async {
-  final loggedIn = await _autenticacao.estaLogado();
-  setState(() {
-    _estaLogado = loggedIn;
-  });
-}
+    final loggedIn = await _autenticacao.estaLogado();
+    setState(() {
+      _estaLogado = loggedIn;
+    });
+  }
 
   // Método para carregar todos os livros (JSON + Shared Preferences)
   Future<void> _carregarTodosOsLivros() async {
@@ -60,7 +60,7 @@ class _LivrosState extends State<Livros> {
       // Carrega livros do JSON e do Shared Preferences simultaneamente
       final [livrosJson, livrosSalvos] = await Future.wait([
         _carregarLivrosDoJson(),
-        _carregarLivrosDoSharedPreferences(),
+        _carregarLivros(),
       ]);
 
       // Combina os livros, evitando duplicatas por ID
@@ -137,15 +137,22 @@ class _LivrosState extends State<Livros> {
   }
 
   // Método para carregar livros do Shared Preferences
-  Future<List<dynamic>> _carregarLivrosDoSharedPreferences() async {
+  Future<List<dynamic>> _carregarLivros() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final String? livrosJson = prefs.getString('livros');
 
+
       if (livrosJson != null && livrosJson.isNotEmpty) {
-        final livros = json.decode(livrosJson);
-        // Marca como vindo do Shared Preferences
-        return livros.map((livro) => {...livro, 'fonte': 'usuario'}).toList();
+      final List<dynamic> livrosSalvos = json.decode(livrosJson);
+      print('📖 Carregados ${livrosSalvos.length} livros do Shared Preferences');
+      return livrosSalvos.map((livro) {
+        return {
+          ...livro,
+          'fonte': 'usuario',
+          'id': livro['id']?.toString() ?? 'usuario_${DateTime.now().millisecondsSinceEpoch}',
+        };
+      }).toList();
       }
       return [];
     } catch (e) {
@@ -155,19 +162,25 @@ class _LivrosState extends State<Livros> {
   }
 
   // Método para salvar TODOS os livros no Shared Preferences
-  Future<void> _salvarTodosOsLivrosNoSharedPreferences() async {
+  Future<void> _salvarTodosOsLivros() async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
-      // Filtra apenas livros de usuário para salvar (não salva os do JSON)
-      final livrosUsuario = livros
-          .where((livro) => livro['fonte'] != 'json')
-          .toList();
+    // Filtra apenas livros de usuário para salvar
+    final livrosUsuario = livros
+        .where((livro) => livro['fonte'] == 'usuario')
+        .toList();
+
+      print('💾 Salvando ${livrosUsuario.length} livros de usuário...');
 
       await prefs.setString('livros', json.encode(livrosUsuario));
-      print(
-        '${livrosUsuario.length} livros de usuário salvos no Shared Preferences',
-      );
+      print('✅ ${livrosUsuario.length} livros de usuário salvos no Shared Preferences');
+      
+    final verificar = await prefs.getString('livros');
+    if (verificar != null) {
+      final listaSalva = json.decode(verificar);
+      print('📊 DEBUG: ${listaSalva.length} livros salvos na memória');
+    }
     } catch (e) {
       print('Erro ao salvar livros: $e');
     }
@@ -223,20 +236,31 @@ class _LivrosState extends State<Livros> {
     );
     if (index != -1) {
       setState(() {
+
+        livros[index] = {
+        ...livros[index], // Mantém campos existentes
+        ...livroEditado,  // Aplica as atualizações
+        'fonte': 'usuario', // Garante que continua como usuário
+      };
+
         // Quando atualiza, marca como livro de usuário
-        livros[index] = {...livroEditado, 'fonte': 'usuario'};
+        //livros[index] = {...livroEditado, 'fonte': 'usuario'};
 
         // Atualiza também na lista visível se estiver lá
-        final visIndex = livrosVisiveis.indexWhere(
-          (livro) => livro['id'] == livroEditado['id'],
-        );
-        if (visIndex != -1) {
-          livrosVisiveis[visIndex] = {...livroEditado, 'fonte': 'usuario'};
-        }
+      final visIndex = livrosVisiveis.indexWhere((livro) => livro['id'] == livroEditado['id']);
+      if (visIndex != -1) {
+        livrosVisiveis[visIndex] = {
+          ...livrosVisiveis[visIndex],
+          ...livroEditado,
+          'fonte': 'usuario',
+        };
+      }
       });
 
       // Salva apenas livros de usuário no Shared Preferences
-      _salvarTodosOsLivrosNoSharedPreferences();
+      _salvarTodosOsLivros();
+
+      _mostrarNotificacao('Livro atualizado com sucesso!', Colors.green);
     }
   }
 
@@ -248,22 +272,30 @@ class _LivrosState extends State<Livros> {
     });
 
     // Salva apenas livros de usuário no Shared Preferences
-    _salvarTodosOsLivrosNoSharedPreferences();
+    _salvarTodosOsLivros();
+
+    _mostrarNotificacao('Livro excluído com sucesso!', Colors.green);
   }
 
   // Método para adicionar um novo livro
-void _adicionarLivro(Map<String, dynamic> novoLivro) {
-  setState(() {
-    livros.insert(0, novoLivro); // ADICIONA à lista local
+  void _adicionarLivro(Map<String, dynamic> novoLivro) {
+    setState(() {
+      final livroComId = {
+      ...novoLivro,
+      'id': 'usuario_${DateTime.now().millisecondsSinceEpoch}',
+      'fonte': 'usuario',
+    };
     
-    // Resetar a lista visível e recarregar com o filtro atual
+    livros.insert(0, livroComId);
     livrosVisiveis = getFiltroLivros().take(pageSize).toList();
     currentPage = 1;
-  });
-  
-  // Salva as alterações no Shared Preferences
-  _salvarTodosOsLivrosNoSharedPreferences();
-}
+    });
+
+    // Salva as alterações no Shared Preferences
+    _salvarTodosOsLivros();
+
+    _mostrarNotificacao('Livro adicionado com sucesso!', Colors.green);
+  }
 
   // Método para recarregar os livros (útil para debug)
   Future<void> _recarregarLivros() async {
@@ -273,72 +305,66 @@ void _adicionarLivro(Map<String, dynamic> novoLivro) {
     await _carregarTodosOsLivros();
   }
 
-  // No _fazerLogin (versão sem método helper)
-Future<void> _fazerLogin() async {
-  try {
-    final emailUsuario = await _autenticacao.entrarComGoogle();
-    if (emailUsuario != null && mounted) {
-      setState(() {
-        _estaLogado = true;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text(
-            'Login realizado com sucesso!',
-            textAlign: TextAlign.center,
-          ),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).size.height * 0.4,
-            left: 50,
-            right: 50,
-          ),
-        ),
-      );
-    }
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Erro ao fazer login: $e',
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).size.height * 0.4,
-          left: 50,
-          right: 50,
-        ),
-      ),
-    );
-  }
-}
-
-// No _logout (versão sem método helper)
-Future<void> _logout() async {
-  await _autenticacao.signOut();
-  setState(() {
-    _estaLogado = false;
-  });
+  // Método para mostrar notificação no meio da tela
+void _mostrarNotificacao(String mensagem, Color cor) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: const Text(
-        'Logout realizado!',
+      content: Text(
+        mensagem,
         textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
       ),
-      backgroundColor: Colors.blue,
+      backgroundColor: cor,
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.only(
         bottom: MediaQuery.of(context).size.height * 0.4,
         left: 50,
         right: 50,
       ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      duration: const Duration(seconds: 3),
     ),
   );
 }
 
+  // No _fazerLogin (versão sem método helper)
+  Future<void> _fazerLogin() async {
+  try {
+    print('🎯 Clicou no botão de login');
+    final emailUsuario = await _autenticacao.entrarComEmail();
+    print('📧 Email retornado: $emailUsuario');
+    
+    if (emailUsuario != null && mounted) {
+      print('✅ Vai atualizar o estado para logado');
+      setState(() {
+        _estaLogado = true;
+      });
+      _mostrarNotificacao('Login realizado com sucesso!', Colors.green);
+    }
+  } catch (e) {
+    print('❌ Erro no login: $e');
+    _mostrarNotificacao('Erro ao fazer login', Colors.red);
+  }
+}
+
+// Método de logout
+Future<void> _logout() async {
+  try {
+    await _autenticacao.sair();
+    setState(() {
+      _estaLogado = false;
+    });
+    _mostrarNotificacao('Logout realizado com sucesso!', Colors.blue);
+  } catch (e) {
+    print('❌ Erro no logout: $e');
+    _mostrarNotificacao('Erro ao fazer logout', Colors.red);
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -363,29 +389,31 @@ Future<void> _logout() async {
         centerTitle: true,
         elevation: 0,
         actions: [
-    IconButton(
-      icon: Icon(
-        _estaLogado ? Icons.logout : Icons.login,
-        color: Colors.white,
-      ),
-      onPressed: _estaLogado ? _logout : _fazerLogin, // Métodos ajustados
-      tooltip: _estaLogado ? 'Sair' : 'Entrar',
-    ),
-  ],
+          IconButton(
+            icon: Icon(
+              _estaLogado ? Icons.logout : Icons.login,
+              color: Colors.white,
+            ),
+            onPressed: _estaLogado ? _logout : _fazerLogin, // Métodos ajustados
+            tooltip: _estaLogado ? 'Sair' : 'Entrar',
+          ),
+        ],
       ),
       body: Column(
         children: [
           // Filtros
           SizedBox(
             height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildFilterChip('Todos', Icons.article_rounded),
-                _buildFilterChip('Lido', Icons.book_rounded),
-                _buildFilterChip('Lendo', Icons.auto_stories_rounded),
-                _buildFilterChip('Quero ler', Icons.bookmark_rounded),
-              ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildFilterChip('Todos', Icons.article_rounded),
+                  _buildFilterChip('Lido', Icons.book_rounded),
+                  _buildFilterChip('Lendo', Icons.auto_stories_rounded),
+                  _buildFilterChip('Quero ler', Icons.bookmark_rounded),
+                ],
+              ),
             ),
           ),
 
@@ -529,6 +557,7 @@ Future<void> _logout() async {
                                     );
                                   } else if (resultado['acao'] == 'editar') {
                                     _atualizarLivro(resultado['livro']);
+                                    await _carregarTodosOsLivros();
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
@@ -565,27 +594,29 @@ Future<void> _logout() async {
 
       // Botão adicionar
       floatingActionButton: _estaLogado
-    ? FloatingActionButton(
-        onPressed: () async {
-          final novoLivro = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AdicionarLivro()),
-          );
+          ? FloatingActionButton(
+              onPressed: () async {
+                final novoLivro = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AdicionarLivro(),
+                  ),
+                );
 
-          if (novoLivro != null) {
-            _adicionarLivro(novoLivro);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Livro adicionado com sucesso!'),
-                backgroundColor: Colors.green,
-              ),
-            );
-          }
-        },
-        backgroundColor: AppColors.secondary,
-        child: const Icon(Icons.add, color: Colors.white),
-      )
-    : null,
+                if (novoLivro != null) {
+                  _adicionarLivro(novoLivro);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Livro adicionado com sucesso!'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              },
+              backgroundColor: AppColors.secondary,
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
     );
   }
 
