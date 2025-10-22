@@ -43,7 +43,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
       _numero_paginasController.text = widget.livroExistente!['numero_paginas'] ?? '';
       _ano_publicacaoController.text = widget.livroExistente!['ano_publicacao'] ?? '';
 
-      // CORREÇÃO: Garantir que os valores existem nas listas
+      // Garantir que os valores existem nas listas
       final statusExistente = widget.livroExistente!['status'];
       _status = _statusOptions.contains(statusExistente) ? statusExistente : 'Quero Ler';
 
@@ -100,7 +100,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
     'Ruim',
   ];
 
-  // MÉTODO CORRETO para salvar livro no Shared Preferences
+  // MÉTODO para salvar livro no Shared Preferences
   Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -113,7 +113,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
         livrosList = json.decode(livrosJson);
       }
       
-      print('🔍 DEBUG _salvarLivroNoSharedPreferences:');
+      print(' DEBUG _salvarLivroNoSharedPreferences:');
       print('   - Livro a salvar: ${livro['titulo']} (ID: ${livro['id']})');
       print('   - Livros existentes: ${livrosList.length}');
       print('   - Modo: ${widget.livroExistente != null ? "EDIÇÃO" : "NOVO"}');
@@ -133,10 +133,10 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
             ...livrosList[index], // Mantém campos existentes
             ...livro,             // Aplica atualizações
           };
-          print('   ✅ LIVRO ATUALIZADO na posição $index');
+          print('LIVRO ATUALIZADO na posição $index');
         } else {
           // Se não encontrou, ADICIONA como novo
-          print('   ⚠️ Livro não encontrado, ADICIONANDO COMO NOVO');
+          print('Livro não encontrado, ADICIONANDO COMO NOVO');
           livrosList.add({
             ...livro,
             'fonte': 'usuario',
@@ -144,7 +144,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
         }
       } else {
         // MODO NOVO LIVRO
-        print('   ➕ ADICIONANDO NOVO LIVRO');
+        print('ADICIONANDO NOVO LIVRO');
         final novoLivroCompleto = {
           ...livro,
           'fonte': 'usuario',
@@ -156,10 +156,10 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
       // Salva a lista atualizada
       await prefs.setString('livros', json.encode(livrosList));
       
-      print('   💾 LISTA SALVA com ${livrosList.length} livros');
+      print('LISTA SALVA com ${livrosList.length} livros');
       
     } catch (e) {
-      print('❌ ERRO em _salvarLivroNoSharedPreferences: $e');
+      print('ERRO em _salvarLivroNoSharedPreferences: $e');
       throw Exception('Erro ao salvar livro: $e');
     }
   }
@@ -203,7 +203,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
           builder: (context) => const Center(child: CircularProgressIndicator()),
         );
 
-        print('📝 Preparando livro para salvar...');
+        print('Preparando livro para salvar...');
         
         // Cria o mapa do livro
         final Map<String, dynamic> livro = {
@@ -227,11 +227,11 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
         // Se for edição, mantém o ID original
         if (widget.livroExistente != null) {
           livro['id'] = widget.livroExistente!['id'];
-          print('   🔄 Editando livro ID: ${livro['id']}');
+          print('Editando livro ID: ${livro['id']}');
         } else {
           // Se for novo livro, gera um ID único
           livro['id'] = DateTime.now().millisecondsSinceEpoch.toString();
-          print('   ➕ Novo livro ID: ${livro['id']}');
+          print('Novo livro ID: ${livro['id']}');
         }
 
         // Salva no Shared Preferences
@@ -239,18 +239,6 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
 
         // Fecha o loading
         Navigator.pop(context);
-
-        // Mostra mensagem de sucesso
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              widget.livroExistente != null
-                  ? 'Livro atualizado com sucesso!'
-                  : 'Livro adicionado com sucesso!',
-            ),
-            backgroundColor: Colors.green,
-          ),
-        );
 
         // Retorna para a tela anterior com o livro
         Navigator.pop(context, livro);

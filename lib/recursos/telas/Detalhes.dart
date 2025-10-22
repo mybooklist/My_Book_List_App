@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:my_book_list/app_colors.dart';
 import 'package:my_book_list/recursos/telas/adicionar_livro.dart';
 import 'package:my_book_list/autenticacao.dart';
-//import 'package:my_book_list/recursos/telas/tela_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -288,11 +287,6 @@ class _DetalhesState extends State<Detalhes> {
         // Atualiza o livro no Shared Preferences
         _atualizarLivro(livroEditado);
         
-        // Retorna para a tela anterior com os dados atualizados
-        //Navigator.pop(context, {
-          //'acao': 'editar',
-          //'livro': livroEditado,
-        //});
       }
     });
   }

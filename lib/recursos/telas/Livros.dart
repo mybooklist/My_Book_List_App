@@ -145,7 +145,7 @@ class _LivrosState extends State<Livros> {
 
       if (livrosJson != null && livrosJson.isNotEmpty) {
       final List<dynamic> livrosSalvos = json.decode(livrosJson);
-      print('📖 Carregados ${livrosSalvos.length} livros do Shared Preferences');
+      print('Carregados ${livrosSalvos.length} livros do Shared Preferences');
       return livrosSalvos.map((livro) {
         return {
           ...livro,
@@ -171,15 +171,15 @@ class _LivrosState extends State<Livros> {
         .where((livro) => livro['fonte'] == 'usuario')
         .toList();
 
-      print('💾 Salvando ${livrosUsuario.length} livros de usuário...');
+      print('Salvando ${livrosUsuario.length} livros de usuário...');
 
       await prefs.setString('livros', json.encode(livrosUsuario));
-      print('✅ ${livrosUsuario.length} livros de usuário salvos no Shared Preferences');
+      print('${livrosUsuario.length} livros de usuário salvos no Shared Preferences');
       
     final verificar = await prefs.getString('livros');
     if (verificar != null) {
       final listaSalva = json.decode(verificar);
-      print('📊 DEBUG: ${listaSalva.length} livros salvos na memória');
+      print('DEBUG: ${listaSalva.length} livros salvos na memória');
     }
     } catch (e) {
       print('Erro ao salvar livros: $e');
@@ -243,8 +243,6 @@ class _LivrosState extends State<Livros> {
         'fonte': 'usuario', // Garante que continua como usuário
       };
 
-        // Quando atualiza, marca como livro de usuário
-        //livros[index] = {...livroEditado, 'fonte': 'usuario'};
 
         // Atualiza também na lista visível se estiver lá
       final visIndex = livrosVisiveis.indexWhere((livro) => livro['id'] == livroEditado['id']);
@@ -332,22 +330,22 @@ void _mostrarNotificacao(String mensagem, Color cor) {
   );
 }
 
-  // No _fazerLogin (versão sem método helper)
+  
   Future<void> _fazerLogin() async {
   try {
-    print('🎯 Clicou no botão de login');
+    print('Clicou no botão de login');
     final emailUsuario = await _autenticacao.entrarComEmail();
-    print('📧 Email retornado: $emailUsuario');
+    print('Email retornado: $emailUsuario');
     
     if (emailUsuario != null && mounted) {
-      print('✅ Vai atualizar o estado para logado');
+      print('Vai atualizar o estado para logado');
       setState(() {
         _estaLogado = true;
       });
       _mostrarNotificacao('Login realizado com sucesso!', Colors.green);
     }
   } catch (e) {
-    print('❌ Erro no login: $e');
+    print('Erro no login: $e');
     _mostrarNotificacao('Erro ao fazer login', Colors.red);
   }
 }
@@ -361,7 +359,7 @@ Future<void> _logout() async {
     });
     _mostrarNotificacao('Logout realizado com sucesso!', Colors.blue);
   } catch (e) {
-    print('❌ Erro no logout: $e');
+    print('Erro no logout: $e');
     _mostrarNotificacao('Erro ao fazer logout', Colors.red);
   }
 }
@@ -547,25 +545,9 @@ Future<void> _logout() async {
                                 if (resultado != null) {
                                   if (resultado['acao'] == 'excluir') {
                                     _excluirLivro(resultado['livroId']);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Livro excluído com sucesso!',
-                                        ),
-                                        backgroundColor: Colors.green,
-                                      ),
-                                    );
                                   } else if (resultado['acao'] == 'editar') {
                                     _atualizarLivro(resultado['livro']);
                                     await _carregarTodosOsLivros();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Livro atualizado com sucesso!',
-                                        ),
-                                        backgroundColor: Colors.green,
-                                      ),
-                                    );
                                   }
                                 }
                               },
@@ -605,12 +587,6 @@ Future<void> _logout() async {
 
                 if (novoLivro != null) {
                   _adicionarLivro(novoLivro);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Livro adicionado com sucesso!'),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
                 }
               },
               backgroundColor: AppColors.secondary,
