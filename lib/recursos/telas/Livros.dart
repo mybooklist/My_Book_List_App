@@ -96,7 +96,7 @@ class _LivrosState extends State<Livros> {
         '${livrosJson.length} livros do JSON + ${livrosSalvos.length} livros salvos = ${livros.length} livros totais',
       );
     } catch (e) {
-      print('❌ Erro ao carregar livros: $e');
+      print('Erro ao carregar livros: $e');
       setState(() {
         isLoading = false;
       });
@@ -383,13 +383,13 @@ Future<void> _logout() async {
           'My Book List',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppColors.secondary,
+        backgroundColor: AppColors.azul,
         centerTitle: true,
         elevation: 0,
         actions: [
           IconButton(
             icon: Icon(
-              _estaLogado ? Icons.logout : Icons.login,
+              _estaLogado ? Icons.logout : Icons.person,
               color: Colors.white,
             ),
             onPressed: _estaLogado ? _logout : _fazerLogin, // Métodos ajustados
@@ -407,8 +407,11 @@ Future<void> _logout() async {
               child: Row(
                 children: [
                   _buildFilterChip('Todos', Icons.article_rounded),
+                  SizedBox(width: 6),
                   _buildFilterChip('Lido', Icons.book_rounded),
+                  SizedBox(width: 6),
                   _buildFilterChip('Lendo', Icons.auto_stories_rounded),
+                  SizedBox(width: 6),
                   _buildFilterChip('Quero ler', Icons.bookmark_rounded),
                 ],
               ),
@@ -428,7 +431,7 @@ Future<void> _logout() async {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(
-                    color: AppColors.secondary,
+                    color: AppColors.azul,
                     width: 2.0,
                   ),
                 ),
@@ -458,7 +461,7 @@ Future<void> _logout() async {
                   Text(
                     'Filtro: $selectedFilter',
                     style: TextStyle(
-                      color: AppColors.secondary,
+                      color: AppColors.azul,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -589,7 +592,7 @@ Future<void> _logout() async {
                   _adicionarLivro(novoLivro);
                 }
               },
-              backgroundColor: AppColors.secondary,
+              backgroundColor: AppColors.azul,
               child: const Icon(Icons.add, color: Colors.white),
             )
           : null,
@@ -601,7 +604,7 @@ Future<void> _logout() async {
       avatar: Icon(
         icon,
         size: 20,
-        color: selectedFilter == label ? Colors.white : AppColors.secondary,
+        color: selectedFilter == label ? Colors.white : AppColors.azul,
       ),
       label: Text(
         label,
@@ -615,8 +618,8 @@ Future<void> _logout() async {
           selectedFilter = selected ? label : 'Todos';
         });
       },
-      backgroundColor: Colors.grey[200],
-      selectedColor: AppColors.secondary,
+      backgroundColor: Colors.white12,
+      selectedColor: AppColors.azul,
       checkmarkColor: Colors.transparent,
       showCheckmark: false,
       elevation: 0,

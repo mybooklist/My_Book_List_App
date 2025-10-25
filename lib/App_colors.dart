@@ -13,4 +13,5 @@ class AppColors {
   static const Color teal = Color(0xFF26A69A); // Teal
   static const Color green = Color(0xFF66BB6A); // Verde
   static const Color cinza2 = Color(0xFF90A4AE); // Cinza claro 
+  static const Color azul = Color(0xFF80CBC4); // Azul claro
 }

@@ -79,6 +79,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
       _status = 'Quero Ler';
       _genero_literario = 'Romance';
       _avaliacao = 'Bom';
+      
     }
   }
 
