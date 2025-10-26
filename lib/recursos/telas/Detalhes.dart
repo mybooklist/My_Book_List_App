@@ -270,7 +270,10 @@ class _DetalhesState extends State<Detalhes> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AdicionarLivro(livroExistente: livro),
+        builder: (context) => AdicionarLivro(
+          livroExistente: livro,
+          usuarioLogado: _estaLogado, // ✅ Adicione esta linha
+        ),
       ),
     ).then((livroEditado) {
       if (livroEditado != null) {
@@ -280,6 +283,7 @@ class _DetalhesState extends State<Detalhes> {
     });
   }
 
+  // função de compartilhar livro
   void _compartilharLivro() {
     String textoCompartilhamento =
         '''
@@ -291,7 +295,7 @@ class _DetalhesState extends State<Detalhes> {
 📌 Status: $status
 📅 Ano de Publicação: $ano_publicacao
 📝 N° de Páginas: $numero_paginas
-📃 Resumo: $resumo
+${resumo != null && resumo!.isNotEmpty ? '📃 $resumo' : ''}
 ${avaliacao != null && avaliacao!.isNotEmpty ? '⭐ Minha avaliação: $avaliacao' : ''}
 
 Compartilhado via My Book List ❤️
@@ -327,7 +331,6 @@ Compartilhado via My Book List ❤️
             onPressed: _compartilharLivro,
             tooltip: 'Compartilhar livro',
           ),
-          if (_estaLogado)
             PopupMenuButton<String>(
               icon: const Icon(Icons.keyboard_control_rounded),
               onSelected: (value) {

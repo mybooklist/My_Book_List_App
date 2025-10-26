@@ -9,8 +9,13 @@ import 'package:my_book_list/app_colors.dart';
 
 class AdicionarLivro extends StatefulWidget {
   final Map<String, dynamic>? livroExistente;
+  final bool usuarioLogado;
 
-  const AdicionarLivro({super.key, this.livroExistente});
+  const AdicionarLivro({
+    super.key,
+    this.livroExistente,
+    required this.usuarioLogado, // Torne obrigatório
+  });
 
   @override
   State<AdicionarLivro> createState() => _AdicionarLivroState();
@@ -23,6 +28,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
   String? _genero_literario;
   String? _avaliacao;
   File? _imagemSelecionada;
+  final String _imagemPadrao = 'lib/recursos/images/books.png';
   String _resumo = "";
 
   final _tituloController = TextEditingController();
@@ -40,20 +46,38 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
     if (widget.livroExistente != null) {
       _tituloController.text = widget.livroExistente!['titulo'] ?? '';
       _autorController.text = widget.livroExistente!['autor'] ?? '';
-      _numero_paginasController.text = widget.livroExistente!['numero_paginas'] ?? '';
-      _ano_publicacaoController.text = widget.livroExistente!['ano_publicacao'] ?? '';
+      _numero_paginasController.text =
+          widget.livroExistente!['numero_paginas'] ?? '';
+      _ano_publicacaoController.text =
+          widget.livroExistente!['ano_publicacao'] ?? '';
 
-      // Garantir que os valores existem nas listas
+      // CORREÇÃO: Garantir que os valores existem nas listas
       final statusExistente = widget.livroExistente!['status'];
-      _status = _statusOptions.contains(statusExistente) ? statusExistente : 'Quero Ler';
+      _status = _statusOptions.contains(statusExistente)
+          ? statusExistente
+          : 'Quero Ler';
 
       final generoExistente = widget.livroExistente!['genero_literario'];
-      _genero_literario = _generos.contains(generoExistente) ? generoExistente : 'Romance';
+      _genero_literario = _generos.contains(generoExistente)
+          ? generoExistente
+          : 'Romance';
 
-      final avaliacaoExistente = widget.livroExistente!['avaliacao'];
-      _avaliacao = _avaliacoes.contains(avaliacaoExistente) ? avaliacaoExistente : 'Bom';
+      // AVALIAÇÃO: Só preenche se usuário estiver logado
+      if (widget.usuarioLogado) {
+        final avaliacaoExistente = widget.livroExistente!['avaliacao'];
+        _avaliacao = _avaliacoes.contains(avaliacaoExistente)
+            ? avaliacaoExistente
+            : 'Bom';
+      } else {
+        _avaliacao = '';
+      }
 
-      _resumo = widget.livroExistente!['resumo'] ?? '';
+      // RESUMO: Só preenche se usuário estiver logado
+      if (widget.usuarioLogado) {
+        _resumo = widget.livroExistente!['resumo'] ?? '';
+      } else {
+        _resumo = '';
+      }
 
       if ((widget.livroExistente!['inicio_leitura'] ?? '').isNotEmpty) {
         final partes = widget.livroExistente!['inicio_leitura'].split('/');
@@ -77,9 +101,16 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
     } else {
       // Valores padrão para novo livro
       _status = 'Quero Ler';
-      _genero_literario = 'Romance';
-      _avaliacao = 'Bom';
-      
+      _genero_literario = 'Literatura Estrangeira';
+
+      // AVALIAÇÃO E RESUMO: Só tem valores padrão se usuário estiver logado
+      if (widget.usuarioLogado) {
+        _avaliacao = 'Bom';
+        _resumo = '';
+      } else {
+        _avaliacao = '';
+        _resumo = '';
+      }
     }
   }
 
@@ -102,46 +133,47 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
   ];
 
   // MÉTODO para salvar livro no Shared Preferences
-  Future<void> _salvarLivroNoSharedPreferences(Map<String, dynamic> livro) async {
+  Future<void> _salvarLivroNoSharedPreferences(
+    Map<String, dynamic> livro,
+  ) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       // Recupera a lista atual de livros
       final String? livrosJson = prefs.getString('livros');
       List<dynamic> livrosList = [];
-      
+
       if (livrosJson != null && livrosJson.isNotEmpty) {
         livrosList = json.decode(livrosJson);
       }
-      
+
       print(' DEBUG _salvarLivroNoSharedPreferences:');
       print('   - Livro a salvar: ${livro['titulo']} (ID: ${livro['id']})');
       print('   - Livros existentes: ${livrosList.length}');
       print('   - Modo: ${widget.livroExistente != null ? "EDIÇÃO" : "NOVO"}');
-      
+
       // Verifica se é edição ou novo livro
       if (widget.livroExistente != null) {
         // MODO EDIÇÃO
         final String livroId = livro['id'];
         print('   - Procurando ID: $livroId para editar');
-        
-        final int index = livrosList.indexWhere((l) => l['id'].toString() == livroId.toString());
+
+        final int index = livrosList.indexWhere(
+          (l) => l['id'].toString() == livroId.toString(),
+        );
         print('   - Index encontrado: $index');
-        
+
         if (index != -1) {
           // ATUALIZA livro existente
           livrosList[index] = {
             ...livrosList[index], // Mantém campos existentes
-            ...livro,             // Aplica atualizações
+            ...livro, // Aplica atualizações
           };
           print('LIVRO ATUALIZADO na posição $index');
         } else {
           // Se não encontrou, ADICIONA como novo
           print('Livro não encontrado, ADICIONANDO COMO NOVO');
-          livrosList.add({
-            ...livro,
-            'fonte': 'usuario',
-          });
+          livrosList.add({...livro, 'fonte': 'usuario'});
         }
       } else {
         // MODO NOVO LIVRO
@@ -149,16 +181,16 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
         final novoLivroCompleto = {
           ...livro,
           'fonte': 'usuario',
-          'id': DateTime.now().millisecondsSinceEpoch.toString(), // Garante ID único
+          'id': DateTime.now().millisecondsSinceEpoch
+              .toString(), // Garante ID único
         };
         livrosList.add(novoLivroCompleto);
       }
-      
+
       // Salva a lista atualizada
       await prefs.setString('livros', json.encode(livrosList));
-      
+
       print('LISTA SALVA com ${livrosList.length} livros');
-      
     } catch (e) {
       print('ERRO em _salvarLivroNoSharedPreferences: $e');
       throw Exception('Erro ao salvar livro: $e');
@@ -201,11 +233,20 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) => const Center(child: CircularProgressIndicator()),
+          builder: (context) =>
+              const Center(child: CircularProgressIndicator()),
         );
 
         print('Preparando livro para salvar...');
-        
+
+        // VERIFICA SE TEM IMAGEM SELECIONADA, SE NÃO, USA A PADRÃO
+      String caminhoImagem;
+      if (_imagemSelecionada != null) {
+        caminhoImagem = _imagemSelecionada!.path;
+      } else {
+        caminhoImagem = _imagemPadrao;
+      }
+
         // Cria o mapa do livro
         final Map<String, dynamic> livro = {
           'titulo': _tituloController.text,
@@ -214,15 +255,22 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
           'genero_literario': _genero_literario ?? 'Romance',
           'ano_publicacao': _ano_publicacaoController.text,
           'numero_paginas': _numero_paginasController.text,
-          'avaliacao': _avaliacao ?? 'Bom',
           'inicio_leitura': _inicio_leitura != null
               ? '${_inicio_leitura!.day}/${_inicio_leitura!.month}/${_inicio_leitura!.year}'
               : '',
           'fim_leitura': _fim_leitura != null
               ? '${_fim_leitura!.day}/${_fim_leitura!.month}/${_fim_leitura!.year}'
               : '',
-          'imagem': _imagemSelecionada?.path ?? '',
-          'resumo': _resumo,
+           'imagem': caminhoImagem,
+
+          // AVALIAÇÃO E RESUMO: Só inclui se usuário estiver logado
+          if (widget.usuarioLogado) ...{
+            'avaliacao': _avaliacao ?? '',
+            'resumo': _resumo,
+          } else ...{
+            'avaliacao': '',
+            'resumo': '',
+          },
         };
 
         // Se for edição, mantém o ID original
@@ -243,7 +291,6 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
 
         // Retorna para a tela anterior com o livro
         Navigator.pop(context, livro);
-
       } catch (e) {
         // Fecha o loading
         Navigator.pop(context);
@@ -282,10 +329,12 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
           key: _formKey,
           child: Column(
             children: [
+              // Campos básicos (sempre visíveis)
               TextFormField(
                 controller: _tituloController,
                 decoration: const InputDecoration(labelText: 'Título do Livro'),
-                validator: (v) => v == null || v.isEmpty ? 'Informe o título' : null,
+                validator: (v) =>
+                    v == null || v.isEmpty ? 'Informe o título' : null,
               ),
               TextFormField(
                 controller: _autorController,
@@ -319,15 +368,20 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Avaliação'),
-                value: _avaliacao,
-                items: _avaliacoes
-                    .map((a) => DropdownMenuItem(value: a, child: Text(a)))
-                    .toList(),
-                onChanged: (v) => setState(() => _avaliacao = v),
-              ),
+
+              // CAMPO DE AVALIAÇÃO (apenas para usuários logados)
+              if (widget.usuarioLogado) ...[
+                const SizedBox(height: 8),
+                DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(labelText: 'Avaliação'),
+                  value: _avaliacao,
+                  items: _avaliacoes
+                      .map((a) => DropdownMenuItem(value: a, child: Text(a)))
+                      .toList(),
+                  onChanged: (v) => setState(() => _avaliacao = v),
+                ),
+              ],
+
               Row(
                 children: [
                   Expanded(
@@ -337,7 +391,9 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                       ),
                       value: _status,
                       items: _statusOptions
-                          .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                          .map(
+                            (s) => DropdownMenuItem(value: s, child: Text(s)),
+                          )
                           .toList(),
                       onChanged: (v) => setState(() => _status = v),
                     ),
@@ -361,7 +417,9 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                       ),
                       value: _genero_literario,
                       items: _generos
-                          .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                          .map(
+                            (g) => DropdownMenuItem(value: g, child: Text(g)),
+                          )
                           .toList(),
                       onChanged: (v) => setState(() => _genero_literario = v),
                     ),
@@ -400,17 +458,49 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                 ),
               ],
 
-              TextFormField(
-                maxLength: 700,
-                maxLines: 5,
-                initialValue: _resumo,
-                decoration: const InputDecoration(
-                  labelText: 'Faça um Resumo sobre esse livro',
-                  alignLabelWithHint: true,
-                  border: OutlineInputBorder(),
+              // CAMPO DE RESUMO (apenas para usuários logados)
+              if (widget.usuarioLogado) ...[
+                const SizedBox(height: 16),
+                TextFormField(
+                  maxLength: 700,
+                  maxLines: 5,
+                  initialValue: _resumo,
+                  decoration: const InputDecoration(
+                    labelText: 'Faça um Resumo sobre esse livro',
+                    alignLabelWithHint: true,
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (v) => setState(() => _resumo = v),
                 ),
-                onChanged: (v) => setState(() => _resumo = v),
-              ),
+              ],
+
+              // AVISO para usuários não logados
+              if (!widget.usuarioLogado) ...[
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.orange[50],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Colors.orange[700]),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Faça login para adicionar avaliação e resumo',
+                          style: TextStyle(
+                            color: Colors.orange[800],
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
 
               const SizedBox(height: 24),
               ElevatedButton(

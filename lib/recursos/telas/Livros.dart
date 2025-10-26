@@ -10,7 +10,6 @@ import 'package:my_book_list/recursos/components/Livro_card.dart';
 import 'package:my_book_list/recursos/telas/adicionar_livro.dart';
 import 'package:my_book_list/autenticacao.dart';
 
-
 class Livros extends StatefulWidget {
   const Livros({super.key});
 
@@ -142,17 +141,18 @@ class _LivrosState extends State<Livros> {
       final prefs = await SharedPreferences.getInstance();
       final String? livrosJson = prefs.getString('livros');
 
-
       if (livrosJson != null && livrosJson.isNotEmpty) {
-      final List<dynamic> livrosSalvos = json.decode(livrosJson);
-      print('Carregados ${livrosSalvos.length} livros do Shared Preferences');
-      return livrosSalvos.map((livro) {
-        return {
-          ...livro,
-          'fonte': 'usuario',
-          'id': livro['id']?.toString() ?? 'usuario_${DateTime.now().millisecondsSinceEpoch}',
-        };
-      }).toList();
+        final List<dynamic> livrosSalvos = json.decode(livrosJson);
+        print('Carregados ${livrosSalvos.length} livros do Shared Preferences');
+        return livrosSalvos.map((livro) {
+          return {
+            ...livro,
+            'fonte': 'usuario',
+            'id':
+                livro['id']?.toString() ??
+                'usuario_${DateTime.now().millisecondsSinceEpoch}',
+          };
+        }).toList();
       }
       return [];
     } catch (e) {
@@ -166,21 +166,23 @@ class _LivrosState extends State<Livros> {
     try {
       final prefs = await SharedPreferences.getInstance();
 
-    // Filtra apenas livros de usuário para salvar
-    final livrosUsuario = livros
-        .where((livro) => livro['fonte'] == 'usuario')
-        .toList();
+      // Filtra apenas livros de usuário para salvar
+      final livrosUsuario = livros
+          .where((livro) => livro['fonte'] == 'usuario')
+          .toList();
 
       print('Salvando ${livrosUsuario.length} livros de usuário...');
 
       await prefs.setString('livros', json.encode(livrosUsuario));
-      print('${livrosUsuario.length} livros de usuário salvos no Shared Preferences');
-      
-    final verificar = await prefs.getString('livros');
-    if (verificar != null) {
-      final listaSalva = json.decode(verificar);
-      print('DEBUG: ${listaSalva.length} livros salvos na memória');
-    }
+      print(
+        '${livrosUsuario.length} livros de usuário salvos no Shared Preferences',
+      );
+
+      final verificar = await prefs.getString('livros');
+      if (verificar != null) {
+        final listaSalva = json.decode(verificar);
+        print('DEBUG: ${listaSalva.length} livros salvos na memória');
+      }
     } catch (e) {
       print('Erro ao salvar livros: $e');
     }
@@ -236,23 +238,23 @@ class _LivrosState extends State<Livros> {
     );
     if (index != -1) {
       setState(() {
-
         livros[index] = {
-        ...livros[index], // Mantém campos existentes
-        ...livroEditado,  // Aplica as atualizações
-        'fonte': 'usuario', // Garante que continua como usuário
-      };
-
+          ...livros[index], // Mantém campos existentes
+          ...livroEditado, // Aplica as atualizações
+          'fonte': 'usuario', // Garante que continua como usuário
+        };
 
         // Atualiza também na lista visível se estiver lá
-      final visIndex = livrosVisiveis.indexWhere((livro) => livro['id'] == livroEditado['id']);
-      if (visIndex != -1) {
-        livrosVisiveis[visIndex] = {
-          ...livrosVisiveis[visIndex],
-          ...livroEditado,
-          'fonte': 'usuario',
-        };
-      }
+        final visIndex = livrosVisiveis.indexWhere(
+          (livro) => livro['id'] == livroEditado['id'],
+        );
+        if (visIndex != -1) {
+          livrosVisiveis[visIndex] = {
+            ...livrosVisiveis[visIndex],
+            ...livroEditado,
+            'fonte': 'usuario',
+          };
+        }
       });
 
       // Salva apenas livros de usuário no Shared Preferences
@@ -279,14 +281,14 @@ class _LivrosState extends State<Livros> {
   void _adicionarLivro(Map<String, dynamic> novoLivro) {
     setState(() {
       final livroComId = {
-      ...novoLivro,
-      'id': 'usuario_${DateTime.now().millisecondsSinceEpoch}',
-      'fonte': 'usuario',
-    };
-    
-    livros.insert(0, livroComId);
-    livrosVisiveis = getFiltroLivros().take(pageSize).toList();
-    currentPage = 1;
+        ...novoLivro,
+        'id': 'usuario_${DateTime.now().millisecondsSinceEpoch}',
+        'fonte': 'usuario',
+      };
+
+      livros.insert(0, livroComId);
+      livrosVisiveis = getFiltroLivros().take(pageSize).toList();
+      currentPage = 1;
     });
 
     // Salva as alterações no Shared Preferences
@@ -304,65 +306,59 @@ class _LivrosState extends State<Livros> {
   }
 
   // Método para mostrar notificação no meio da tela
-void _mostrarNotificacao(String mensagem, Color cor) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        mensagem,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
+  void _mostrarNotificacao(String mensagem, Color cor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          mensagem,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
+        backgroundColor: cor,
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height * 0.4,
+          left: 50,
+          right: 50,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        duration: const Duration(seconds: 3),
       ),
-      backgroundColor: cor,
-      behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height * 0.4,
-        left: 50,
-        right: 50,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      duration: const Duration(seconds: 3),
-    ),
-  );
-}
+    );
+  }
 
-  
   Future<void> _fazerLogin() async {
-  try {
-    print('Clicou no botão de login');
-    final emailUsuario = await _autenticacao.entrarComEmail();
-    print('Email retornado: $emailUsuario');
-    
-    if (emailUsuario != null && mounted) {
-      print('Vai atualizar o estado para logado');
-      setState(() {
-        _estaLogado = true;
-      });
-      _mostrarNotificacao('Login realizado com sucesso!', Colors.green);
-    }
-  } catch (e) {
-    print('Erro no login: $e');
-    _mostrarNotificacao('Erro ao fazer login', Colors.red);
-  }
-}
+    try {
+      print('Clicou no botão de login');
+      final emailUsuario = await _autenticacao.entrarComEmail();
+      print('Email retornado: $emailUsuario');
 
-// Método de logout
-Future<void> _logout() async {
-  try {
-    await _autenticacao.sair();
-    setState(() {
-      _estaLogado = false;
-    });
-    _mostrarNotificacao('Logout realizado com sucesso!', Colors.blue);
-  } catch (e) {
-    print('Erro no logout: $e');
-    _mostrarNotificacao('Erro ao fazer logout', Colors.red);
+      if (emailUsuario != null && mounted) {
+        print('Vai atualizar o estado para logado');
+        setState(() {
+          _estaLogado = true;
+        });
+        _mostrarNotificacao('Login realizado com sucesso!', Colors.green);
+      }
+    } catch (e) {
+      print('Erro no login: $e');
+      _mostrarNotificacao('Erro ao fazer login', Colors.red);
+    }
   }
-}
+
+  // Método de logout
+  Future<void> _logout() async {
+    try {
+      await _autenticacao.sair();
+      setState(() {
+        _estaLogado = false;
+      });
+      _mostrarNotificacao('Logout realizado com sucesso!', Colors.blue);
+    } catch (e) {
+      print('Erro no logout: $e');
+      _mostrarNotificacao('Erro ao fazer logout', Colors.red);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -430,10 +426,7 @@ Future<void> _logout() async {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: AppColors.azul,
-                    width: 2.0,
-                  ),
+                  borderSide: BorderSide(color: AppColors.azul, width: 2.0),
                 ),
               ),
               onChanged: (value) {
@@ -508,8 +501,9 @@ Future<void> _logout() async {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AdicionarLivro(),
+                                        builder: (context) => AdicionarLivro(
+                                          usuarioLogado: _estaLogado,
+                                        ),
                                       ),
                                     );
                                   },
@@ -539,9 +533,8 @@ Future<void> _logout() async {
                                 final resultado = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Detalhes(
-                                      livro: livro,
-                                    ), // Agora passa o map completo
+                                    builder: (context) =>
+                                        Detalhes(livro: livro),
                                   ),
                                 );
 
@@ -549,8 +542,20 @@ Future<void> _logout() async {
                                   if (resultado['acao'] == 'excluir') {
                                     _excluirLivro(resultado['livroId']);
                                   } else if (resultado['acao'] == 'editar') {
-                                    _atualizarLivro(resultado['livro']);
-                                    await _carregarTodosOsLivros();
+                                    final livroEditado = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AdicionarLivro(
+                                          livroExistente: livro,
+                                          usuarioLogado: _estaLogado,
+                                        ),
+                                      ),
+                                    );
+
+                                    if (livroEditado != null) {
+                                      _atualizarLivro(livroEditado);
+                                      await _carregarTodosOsLivros();
+                                    }
                                   }
                                 }
                               },
@@ -559,6 +564,7 @@ Future<void> _logout() async {
                                 autor: livro['autor'] ?? 'Autor desconhecido',
                                 status: livro['status'] ?? 'Sem status',
                                 imagem: livro['imagem'] ?? '',
+                                temCapa: (livro['imagem'] ?? '').isNotEmpty,
                               ),
                             );
                           } else {
@@ -578,24 +584,22 @@ Future<void> _logout() async {
       ),
 
       // Botão adicionar
-      floatingActionButton: _estaLogado
-          ? FloatingActionButton(
-              onPressed: () async {
-                final novoLivro = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AdicionarLivro(),
-                  ),
-                );
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final novoLivro = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AdicionarLivro(usuarioLogado: _estaLogado),
+            ),
+          );
 
-                if (novoLivro != null) {
-                  _adicionarLivro(novoLivro);
-                }
-              },
-              backgroundColor: AppColors.azul,
-              child: const Icon(Icons.add, color: Colors.white),
-            )
-          : null,
+          if (novoLivro != null) {
+            _adicionarLivro(novoLivro);
+          }
+        },
+        backgroundColor: AppColors.azul,
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
     );
   }
 

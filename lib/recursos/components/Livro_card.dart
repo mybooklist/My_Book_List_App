@@ -9,6 +9,7 @@ class Livro_card extends StatelessWidget {
   final String autor;
   final String status;
   final String? imagem;
+  final bool temCapa;
 
   const Livro_card({
     super.key,
@@ -16,6 +17,7 @@ class Livro_card extends StatelessWidget {
     required this.autor,
     required this.status,
     this.imagem,
+    this.temCapa = false,
   });
 
   Widget _buildImagem(String path) {
@@ -42,11 +44,31 @@ class Livro_card extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(12),
               ),
-              child: imagem != null
+              child: imagem != null && imagem!.isNotEmpty
                   ? _buildImagem(imagem!)
                   : Container(
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.image, size: 50),
+                      color: Colors.grey[200],
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.menu_book_rounded,
+                              size: 50,
+                              color: Colors.grey[500],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Sem capa',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[500],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
             ),
           ),
