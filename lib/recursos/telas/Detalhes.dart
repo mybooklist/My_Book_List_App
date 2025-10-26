@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, non_constant_identifier_names, unnecessary_string_interpolations, use_build_context_synchronously, unnecessary_this, avoid_print
+// ignore_for_file: file_names, non_constant_identifier_names, unnecessary_string_interpolations, use_build_context_synchronously, unnecessary_this, avoid_print, deprecated_member_use, body_might_complete_normally_catch_error
 
 import 'dart:io';
 
@@ -6,16 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:my_book_list/app_colors.dart';
 import 'package:my_book_list/recursos/telas/adicionar_livro.dart';
 import 'package:my_book_list/autenticacao.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class Detalhes extends StatefulWidget {
   final Map<dynamic, dynamic> livro;
 
-  const Detalhes({
-    super.key,
-    required this.livro,
-  });
+  const Detalhes({super.key, required this.livro});
 
   @override
   State<Detalhes> createState() => _DetalhesState();
@@ -51,13 +49,15 @@ class _DetalhesState extends State<Detalhes> {
   String get titulo => livro['titulo']?.toString() ?? 'Sem título';
   String get autor => livro['autor']?.toString() ?? 'Autor desconhecido';
   String get status => livro['status']?.toString() ?? 'Sem status';
-  String get genero_literario => livro['genero_literario']?.toString() ?? 'Sem gênero';
+  String get genero_literario =>
+      livro['genero_literario']?.toString() ?? 'Sem gênero';
   String get ano_publicacao => livro['ano_publicacao']?.toString() ?? '----';
   String? get resumo => livro['resumo']?.toString();
   String? get inicio_leitura => livro['inicio_leitura']?.toString();
   String? get fim_leitura => livro['fim_leitura']?.toString();
   String get imagem => livro['imagem']?.toString() ?? '';
-  String get numero_paginas => livro['numero_paginas']?.toString() ?? 'Não informado';
+  String get numero_paginas =>
+      livro['numero_paginas']?.toString() ?? 'Não informado';
   String? get avaliacao => livro['avaliacao']?.toString();
 
   // mapa constante
@@ -76,18 +76,18 @@ class _DetalhesState extends State<Detalhes> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final String? livrosJson = prefs.getString('livros');
-      
+
       if (livrosJson != null) {
         List<dynamic> livrosList = json.decode(livrosJson);
-        
+
         // Remove o livro da lista
         livrosList.removeWhere((livro) => livro['id'] == this.livro['id']);
-        
+
         // Salva a lista atualizada
         await prefs.setString('livros', json.encode(livrosList));
-        
+
         print('Livro excluído com sucesso!');
-        
+
         // Mostra mensagem de sucesso
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -95,12 +95,12 @@ class _DetalhesState extends State<Detalhes> {
             backgroundColor: Colors.green,
           ),
         );
-        
+
         // Retorna para a tela anterior com ação de exclusão
         if (mounted) {
           Navigator.pop(context, {
-            'acao': 'excluir', 
-            'livroId': this.livro['id']?.toString() ?? ''
+            'acao': 'excluir',
+            'livroId': this.livro['id']?.toString() ?? '',
           });
         }
       }
@@ -126,27 +126,24 @@ class _DetalhesState extends State<Detalhes> {
 
       final prefs = await SharedPreferences.getInstance();
       final String? livrosJson = prefs.getString('livros');
-      
+
       if (livrosJson != null) {
         List<dynamic> livrosList = json.decode(livrosJson);
-        
+
         // Encontra o índice do livro e atualiza
-        final int index = livrosList.indexWhere((livro) => 
-          livro['id']?.toString() == this.livro['id']?.toString()
+        final int index = livrosList.indexWhere(
+          (livro) => livro['id']?.toString() == this.livro['id']?.toString(),
         );
-        
+
         if (index != -1) {
           // Mantém o ID original e atualiza os outros campos
-          livrosList[index] = {
-            ...livrosList[index],
-            ...livroConvertido,
-          };
-          
+          livrosList[index] = {...livrosList[index], ...livroConvertido};
+
           // Salva a lista atualizada
           await prefs.setString('livros', json.encode(livrosList));
-          
+
           print('Livro atualizado com sucesso!');
-          
+
           // Mostra mensagem de sucesso
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -251,9 +248,7 @@ class _DetalhesState extends State<Detalhes> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Excluir livro'),
-        content: const Text(
-          'Tem certeza que deseja excluir este livro?',
-        ),
+        content: const Text('Tem certeza que deseja excluir este livro?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -264,10 +259,7 @@ class _DetalhesState extends State<Detalhes> {
               Navigator.pop(context); // fecha o diálogo
               _excluirLivro(); // executa a exclusão
             },
-            child: const Text(
-              'Excluir',
-              style: TextStyle(color: Colors.red),
-            ),
+            child: const Text('Excluir', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -278,16 +270,43 @@ class _DetalhesState extends State<Detalhes> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AdicionarLivro(
-          livroExistente: livro, // Já está convertido para Map<String, dynamic>
-        ),
+        builder: (context) => AdicionarLivro(livroExistente: livro),
       ),
     ).then((livroEditado) {
       if (livroEditado != null) {
         // Atualiza o livro no Shared Preferences
         _atualizarLivro(livroEditado);
-        
       }
+    });
+  }
+
+  void _compartilharLivro() {
+    String textoCompartilhamento =
+        '''
+📖 $titulo
+
+✍️ Autor: $autor
+
+🔖 Gênero: $genero_literario
+📌 Status: $status
+📅 Ano de Publicação: $ano_publicacao
+📝 N° de Páginas: $numero_paginas
+📃 Resumo: $resumo
+${avaliacao != null && avaliacao!.isNotEmpty ? '⭐ Minha avaliação: $avaliacao' : ''}
+
+Compartilhado via My Book List ❤️
+  ''';
+
+    // Tenta compartilhar e trata qualquer erro
+    Share.share(textoCompartilhamento).catchError((error) {
+      print('Erro no compartilhamento: $error');
+      // Mostra um SnackBar de erro
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Não foi possível compartilhar'),
+          backgroundColor: Colors.red,
+        ),
+      );
     });
   }
 
@@ -302,23 +321,29 @@ class _DetalhesState extends State<Detalhes> {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-  if (_estaLogado) 
-    PopupMenuButton<String>(
-      icon: const Icon(Icons.keyboard_control_rounded),
-      onSelected: (value) {
-        if (value == 'editar') {
-          _editarLivro();
-        } else if (value == 'excluir') {
-          _confirmarExclusao();
-        }
-      },
-      itemBuilder: (context) => [
-        const PopupMenuItem(value: 'editar', child: Text('Editar')),
-        const PopupMenuItem(value: 'excluir', child: Text('Excluir')),
-      ],
-    ),
-  const SizedBox(width: 8),
-],
+          // Botão de compartilhar - sempre visível
+          IconButton(
+            icon: const Icon(Icons.share, color: Colors.blue),
+            onPressed: _compartilharLivro,
+            tooltip: 'Compartilhar livro',
+          ),
+          if (_estaLogado)
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.keyboard_control_rounded),
+              onSelected: (value) {
+                if (value == 'editar') {
+                  _editarLivro();
+                } else if (value == 'excluir') {
+                  _confirmarExclusao();
+                }
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(value: 'editar', child: Text('Editar')),
+                const PopupMenuItem(value: 'excluir', child: Text('Excluir')),
+              ],
+            ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
