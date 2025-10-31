@@ -1,8 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api, avoid_print, unused_element, use_build_context_synchronously, await_only_futures
+// ignore_for_file: library_private_types_in_public_api, avoid_print, unused_element, use_build_context_synchronously, await_only_futures, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' as root_bundle;
+import 'package:my_book_list/recursos/components/banner_anuncio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_book_list/app_colors.dart';
 import 'package:my_book_list/recursos/telas/Detalhes.dart';
@@ -619,6 +620,10 @@ class _LivrosState extends State<Livros> {
         backgroundColor: AppColors.azul,
         child: const Icon(Icons.add, color: Colors.white),
       ),
+
+      bottomNavigationBar: Container(
+  child:  BannerAnuncio(),
+),
     );
   }
 
