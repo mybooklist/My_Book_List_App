@@ -10,11 +10,13 @@ import 'package:my_book_list/app_colors.dart';
 class AdicionarLivro extends StatefulWidget {
   final Map<String, dynamic>? livroExistente;
   final bool usuarioLogado;
+  final VoidCallback? onLivroSalvo; // Callback adicionado
 
   const AdicionarLivro({
     super.key,
     this.livroExistente,
-    required this.usuarioLogado, // Torne obrigatório
+    required this.usuarioLogado,
+    this.onLivroSalvo, // Novo parâmetro opcional
   });
 
   @override
@@ -28,7 +30,6 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
   String? _genero_literario;
   String? _avaliacao;
   File? _imagemSelecionada;
-  final String _imagemPadrao = 'lib/recursos/images/books.png';
   String _resumo = "";
 
   final _tituloController = TextEditingController();
@@ -240,12 +241,10 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
         print('Preparando livro para salvar...');
 
         // VERIFICA SE TEM IMAGEM SELECIONADA, SE NÃO, USA A PADRÃO
-      String caminhoImagem;
-      if (_imagemSelecionada != null) {
-        caminhoImagem = _imagemSelecionada!.path;
-      } else {
-        caminhoImagem = _imagemPadrao;
-      }
+        String caminhoImagem = "";
+        if (_imagemSelecionada != null) {
+          caminhoImagem = _imagemSelecionada!.path;
+        }
 
         // Cria o mapa do livro
         final Map<String, dynamic> livro = {
@@ -261,7 +260,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
           'fim_leitura': _fim_leitura != null
               ? '${_fim_leitura!.day}/${_fim_leitura!.month}/${_fim_leitura!.year}'
               : '',
-           'imagem': caminhoImagem,
+          'imagem': caminhoImagem,
 
           // AVALIAÇÃO E RESUMO: Só inclui se usuário estiver logado
           if (widget.usuarioLogado) ...{
@@ -289,8 +288,13 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
         // Fecha o loading
         Navigator.pop(context);
 
-        // Retorna para a tela anterior com o livro
-        Navigator.pop(context, livro);
+        // CHAMA O CALLBACK SE EXISTIR - ANTES de fechar a tela
+        if (widget.onLivroSalvo != null) {
+          widget.onLivroSalvo!();
+        }
+
+        // Fecha a tela de adicionar/editar livro
+        Navigator.pop(context);
       } catch (e) {
         // Fecha o loading
         Navigator.pop(context);

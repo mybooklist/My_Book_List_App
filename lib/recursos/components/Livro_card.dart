@@ -135,7 +135,7 @@ class Livro_card extends StatelessWidget {
         return Colors.green;
       case 'Lendo':
         return Colors.orange;
-      case 'Quero ler':
+      case 'Quero Ler':
         return Colors.blue;
       default:
         return Colors.grey;

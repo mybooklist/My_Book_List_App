@@ -89,12 +89,12 @@ class _DetalhesState extends State<Detalhes> {
         print('Livro excluído com sucesso!');
 
         // Mostra mensagem de sucesso
-        ScaffoldMessenger.of(context).showSnackBar(
+        /*ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Livro excluído com sucesso!'),
             backgroundColor: Colors.green,
           ),
-        );
+        );*/
 
         // Retorna para a tela anterior com ação de exclusão
         if (mounted) {
@@ -225,7 +225,7 @@ class _DetalhesState extends State<Detalhes> {
     }
   }
 
-  // agora aceita Widget para suportar Icon(...) ou Image.asset(...)
+  // Widget para suportar Icon(...) ou Image.asset(...)
   Widget _infoCard(String text, Widget icon) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -272,7 +272,7 @@ class _DetalhesState extends State<Detalhes> {
       MaterialPageRoute(
         builder: (context) => AdicionarLivro(
           livroExistente: livro,
-          usuarioLogado: _estaLogado, // ✅ Adicione esta linha
+          usuarioLogado: _estaLogado, 
         ),
       ),
     ).then((livroEditado) {

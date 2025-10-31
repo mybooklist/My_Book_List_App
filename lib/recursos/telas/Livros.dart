@@ -408,7 +408,7 @@ class _LivrosState extends State<Livros> {
                   SizedBox(width: 6),
                   _buildFilterChip('Lendo', Icons.auto_stories_rounded),
                   SizedBox(width: 6),
-                  _buildFilterChip('Quero ler', Icons.bookmark_rounded),
+                  _buildFilterChip('Quero Ler', Icons.bookmark_rounded),
                 ],
               ),
             ),
@@ -503,6 +503,10 @@ class _LivrosState extends State<Livros> {
                                       MaterialPageRoute(
                                         builder: (context) => AdicionarLivro(
                                           usuarioLogado: _estaLogado,
+                                          onLivroSalvo: () {
+                                            // CALLBACK: Recarrega os livros quando salvar
+                                            _carregarTodosOsLivros();
+                                          },
                                         ),
                                       ),
                                     );
@@ -548,6 +552,10 @@ class _LivrosState extends State<Livros> {
                                         builder: (context) => AdicionarLivro(
                                           livroExistente: livro,
                                           usuarioLogado: _estaLogado,
+                                          onLivroSalvo: () {
+                                            // CALLBACK: Recarrega os livros quando editar
+                                            _carregarTodosOsLivros();
+                                          },
                                         ),
                                       ),
                                     );
@@ -563,8 +571,14 @@ class _LivrosState extends State<Livros> {
                                 titulo: livro['titulo'] ?? 'Sem título',
                                 autor: livro['autor'] ?? 'Autor desconhecido',
                                 status: livro['status'] ?? 'Sem status',
-                                imagem: livro['imagem'] ?? '',
-                                temCapa: (livro['imagem'] ?? '').isNotEmpty,
+                                imagem:
+                                    (livro['imagem'] != null &&
+                                        livro['imagem'].isNotEmpty)
+                                    ? livro['imagem']
+                                    : null,
+                                temCapa:
+                                    livro['imagem'] != null &&
+                                    livro['imagem'].isNotEmpty,
                               ),
                             );
                           } else {
@@ -589,7 +603,12 @@ class _LivrosState extends State<Livros> {
           final novoLivro = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AdicionarLivro(usuarioLogado: _estaLogado),
+              builder: (context) => AdicionarLivro(usuarioLogado: _estaLogado,
+              onLivroSalvo: () {
+            // CALLBACK: Recarrega os livros quando adicionar novo
+            _carregarTodosOsLivros();
+          },
+              ),
             ),
           );
 
