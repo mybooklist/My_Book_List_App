@@ -245,7 +245,7 @@ class _LivrosState extends State<Livros> {
           'fonte': 'usuario', // Garante que continua como usuário
         };
 
-        // Atualiza também na lista visível se estiver lá
+        // Atualiza também na lista visível se estiver lá (MESMA LÓGICA DO EXCLUIR)
         final visIndex = livrosVisiveis.indexWhere(
           (livro) => livro['id'] == livroEditado['id'],
         );
@@ -258,7 +258,7 @@ class _LivrosState extends State<Livros> {
         }
       });
 
-      // Salva apenas livros de usuário no Shared Preferences
+      // Salva apenas livros de usuário no Shared Preferences (MESMA LÓGICA DO EXCLUIR)
       _salvarTodosOsLivros();
 
       _mostrarNotificacao('Livro atualizado com sucesso!', Colors.green);
@@ -287,12 +287,15 @@ class _LivrosState extends State<Livros> {
         'fonte': 'usuario',
       };
 
+      // Adiciona no início da lista
       livros.insert(0, livroComId);
-      livrosVisiveis = getFiltroLivros().take(pageSize).toList();
-      currentPage = 1;
+
+      // Atualiza a lista visível
+      final livrosFiltrados = getFiltroLivros();
+      livrosVisiveis = livrosFiltrados.take(pageSize).toList();
     });
 
-    // Salva as alterações no Shared Preferences
+    // Salva as alterações no Shared Preferences (MESMA LÓGICA DO EXCLUIR)
     _salvarTodosOsLivros();
 
     _mostrarNotificacao('Livro adicionado com sucesso!', Colors.green);
@@ -504,9 +507,8 @@ class _LivrosState extends State<Livros> {
                                       MaterialPageRoute(
                                         builder: (context) => AdicionarLivro(
                                           usuarioLogado: _estaLogado,
-                                          onLivroSalvo: () {
-                                            // CALLBACK: Recarrega os livros quando salvar
-                                            _carregarTodosOsLivros();
+                                          onLivroSalvo: (livroSalvo) {
+                                            _adicionarLivro(livroSalvo);
                                           },
                                         ),
                                       ),
@@ -553,9 +555,8 @@ class _LivrosState extends State<Livros> {
                                         builder: (context) => AdicionarLivro(
                                           livroExistente: livro,
                                           usuarioLogado: _estaLogado,
-                                          onLivroSalvo: () {
-                                            // CALLBACK: Recarrega os livros quando editar
-                                            _carregarTodosOsLivros();
+                                          onLivroSalvo: (livroSalvo) {
+                                            _atualizarLivro(livroSalvo);
                                           },
                                         ),
                                       ),
@@ -563,7 +564,7 @@ class _LivrosState extends State<Livros> {
 
                                     if (livroEditado != null) {
                                       _atualizarLivro(livroEditado);
-                                      await _carregarTodosOsLivros();
+                                      //await _carregarTodosOsLivros();
                                     }
                                   }
                                 }
@@ -604,11 +605,12 @@ class _LivrosState extends State<Livros> {
           final novoLivro = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AdicionarLivro(usuarioLogado: _estaLogado,
-              onLivroSalvo: () {
-            // CALLBACK: Recarrega os livros quando adicionar novo
-            _carregarTodosOsLivros();
-          },
+              builder: (context) => AdicionarLivro(
+                usuarioLogado: _estaLogado,
+                onLivroSalvo: (livroSalvo) {
+                  // AGORA RECEBE O LIVRO
+                  _adicionarLivro(livroSalvo);
+                },
               ),
             ),
           );
@@ -621,9 +623,7 @@ class _LivrosState extends State<Livros> {
         child: const Icon(Icons.add, color: Colors.white),
       ),
 
-      bottomNavigationBar: Container(
-  child:  BannerAnuncio(),
-),
+      bottomNavigationBar: Container(child: BannerAnuncio()),
     );
   }
 

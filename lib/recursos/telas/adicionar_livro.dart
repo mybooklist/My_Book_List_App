@@ -10,13 +10,13 @@ import 'package:my_book_list/app_colors.dart';
 class AdicionarLivro extends StatefulWidget {
   final Map<String, dynamic>? livroExistente;
   final bool usuarioLogado;
-  final VoidCallback? onLivroSalvo; // Callback adicionado
+  final Function(Map<String, dynamic>)? onLivroSalvo; 
 
   const AdicionarLivro({
     super.key,
     this.livroExistente,
     required this.usuarioLogado,
-    this.onLivroSalvo, // Novo parâmetro opcional
+    this.onLivroSalvo, 
   });
 
   @override
@@ -290,11 +290,11 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
 
         // CHAMA O CALLBACK SE EXISTIR - ANTES de fechar a tela
         if (widget.onLivroSalvo != null) {
-          widget.onLivroSalvo!();
+          widget.onLivroSalvo!(livro);
         }
 
         // Fecha a tela de adicionar/editar livro
-        Navigator.pop(context);
+        Navigator.pop(context, livro);
       } catch (e) {
         // Fecha o loading
         Navigator.pop(context);
