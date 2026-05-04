@@ -311,25 +311,29 @@ class _LivrosState extends State<Livros> {
 
   // Método para mostrar notificação no meio da tela
   void _mostrarNotificacao(String mensagem, Color cor) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          mensagem,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-        backgroundColor: cor,
-        behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).size.height * 0.4,
-          left: 50,
-          right: 50,
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        duration: const Duration(seconds: 3),
+  // Remove qualquer SnackBar existente primeiro
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        mensagem,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
-    );
-  }
+      backgroundColor: cor,
+      behavior: SnackBarBehavior.floating,
+      // Posicionamento no meio da tela
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.height * 0.4,
+        left: MediaQuery.of(context).size.width * 0.1,
+        right: MediaQuery.of(context).size.width * 0.1,
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
 
   Future<void> _fazerLogin() async {
     try {
