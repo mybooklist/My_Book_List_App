@@ -63,7 +63,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
       enabledBorder: border,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: AppColors.teal, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.azul, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
@@ -620,7 +620,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
               ElevatedButton(
                 onPressed: _salvarLivro,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.teal,
+                  backgroundColor: AppColors.azul,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 14,

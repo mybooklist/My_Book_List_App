@@ -377,10 +377,10 @@ class _LivrosState extends State<Livros> {
           child: SizedBox(
             width: 60,
             height: 60,
-            child: Image.asset(
+            /*child: Image.asset(
               'lib/recursos/images/logo.png',
               fit: BoxFit.contain,
-            ),
+            ),*/
           ),
         ),
         title: const Text(
@@ -428,9 +428,10 @@ class _LivrosState extends State<Livros> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Buscar por título ou autor...',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search, color: AppColors.azul,),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey[400]!),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
