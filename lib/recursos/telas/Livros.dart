@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' as root_bundle;
-import 'package:my_book_list/recursos/components/banner_anuncio.dart';
+//import 'package:my_book_list/recursos/components/banner_anuncio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:my_book_list/app_colors.dart';
 import 'package:my_book_list/recursos/telas/Detalhes.dart';
