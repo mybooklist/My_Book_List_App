@@ -387,7 +387,7 @@ Compartilhado via My Book List ❤️
                 _infoCard(
                   avaliacao ?? "Sem avaliação",
                   Icon(
-                    Icons.favorite_rounded,
+                    Icons.star_rounded,
                     size: 18,
                     color: AppColors.textPrimary,
                   ),
