@@ -10,13 +10,13 @@ import 'package:my_book_list/app_colors.dart';
 class AdicionarLivro extends StatefulWidget {
   final Map<String, dynamic>? livroExistente;
   final bool usuarioLogado;
-  final Function(Map<String, dynamic>)? onLivroSalvo; 
+  final Function(Map<String, dynamic>)? onLivroSalvo;
 
   const AdicionarLivro({
     super.key,
     this.livroExistente,
     required this.usuarioLogado,
-    this.onLivroSalvo, 
+    this.onLivroSalvo,
   });
 
   @override
@@ -39,6 +39,44 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
 
   DateTime? _inicio_leitura;
   DateTime? _fim_leitura;
+
+  // estilização dos campos do formulário
+  InputDecoration _inputDecoration(
+    String label, {
+    IconData? prefixIcon,
+    Widget? suffix,
+  }) {
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Color(0xFFDDDDDD)),
+    );
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+      prefixIcon: prefixIcon != null
+          ? Icon(prefixIcon, size: 18, color: Colors.grey)
+          : null,
+      suffixIcon: suffix,
+      filled: false,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+      border: border,
+      enabledBorder: border,
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: AppColors.teal, width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: const BorderSide(color: Colors.redAccent),
+      ),
+    );
+  }
+
+  final _inicioController = TextEditingController();
+  final _fimController = TextEditingController();
+
+  String _formatarData(DateTime d) =>
+      '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')}/${d.year}';
 
   @override
   void initState() {
@@ -310,6 +348,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
     }
   }
 
+  // inicio dos campos de formulário
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -336,64 +375,112 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
               // Campos básicos (sempre visíveis)
               TextFormField(
                 controller: _tituloController,
-                decoration: const InputDecoration(labelText: 'Título do Livro'),
+                decoration: _inputDecoration(
+                  'Título do Livro',
+                  prefixIcon: Icons.menu_book_outlined,
+                ),
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Informe o título' : null,
               ),
+              const SizedBox(height: 12),
               TextFormField(
                 controller: _autorController,
-                decoration: const InputDecoration(labelText: 'Nome do Autor'),
+                decoration: _inputDecoration(
+                  'Nome do Autor',
+                  prefixIcon: Icons.person_outline,
+                ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _selecionarData(true),
-                      child: Text(
-                        _inicio_leitura == null
-                            ? 'Início da Leitura'
-                            : '${_inicio_leitura!.day}/${_inicio_leitura!.month}/${_inicio_leitura!.year}',
-                        style: TextStyle(color: AppColors.textPrimary),
+                    child: TextFormField(
+                      controller: _inicioController,
+                      readOnly: true,
+                      decoration: _inputDecoration(
+                        'Início da Leitura',
+                        suffix: const Icon(
+                          Icons.calendar_today_outlined,
+                          size: 18,
+                          color: Colors.grey,
+                        ),
                       ),
+                      onTap: () async {
+                        final data = await showDatePicker(
+                          context: context,
+                          initialDate: _inicio_leitura ?? DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+                        if (data != null) {
+                          setState(() {
+                            _inicio_leitura = data;
+                            _inicioController.text = _formatarData(data);
+                          });
+                        }
+                      },
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 10),
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _selecionarData(false),
-                      child: Text(
-                        _fim_leitura == null
-                            ? 'Fim da Leitura'
-                            : '${_fim_leitura!.day}/${_fim_leitura!.month}/${_fim_leitura!.year}',
-                        style: TextStyle(color: AppColors.textPrimary),
+                    child: TextFormField(
+                      controller: _fimController,
+                      readOnly: true,
+                      decoration: _inputDecoration(
+                        'Fim da Leitura',
+                        suffix: const Icon(
+                          Icons.calendar_today_outlined,
+                          size: 18,
+                          color: Colors.grey,
+                        ),
                       ),
+                      onTap: () async {
+                        final data = await showDatePicker(
+                          context: context,
+                          initialDate: _fim_leitura ?? DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+                        if (data != null) {
+                          setState(() {
+                            _fim_leitura = data;
+                            _fimController.text = _formatarData(data);
+                          });
+                        }
+                      },
                     ),
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
 
               // CAMPO DE AVALIAÇÃO (apenas para usuários logados)
               if (widget.usuarioLogado) ...[
-                const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(labelText: 'Avaliação'),
+                  decoration: _inputDecoration('Avaliação'),
                   value: _avaliacao,
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Colors.grey,
+                  ),
                   items: _avaliacoes
                       .map((a) => DropdownMenuItem(value: a, child: Text(a)))
                       .toList(),
                   onChanged: (v) => setState(() => _avaliacao = v),
                 ),
+                const SizedBox(height: 12),
               ],
 
               Row(
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: 'Status da Leitura',
-                      ),
+                      decoration: _inputDecoration('Status da Leitura'),
                       value: _status,
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.grey,
+                      ),
                       items: _statusOptions
                           .map(
                             (s) => DropdownMenuItem(value: s, child: Text(s)),
@@ -402,52 +489,77 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                       onChanged: (v) => setState(() => _status = v),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
                       controller: _numero_paginasController,
-                      decoration: const InputDecoration(labelText: 'Páginas'),
+                      decoration: _inputDecoration('Páginas'),
                       keyboardType: TextInputType.number,
                     ),
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: 'Gênero Literário',
-                      ),
+                      decoration: _inputDecoration('Gênero Literário'),
                       value: _genero_literario,
+                      isExpanded: true,
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.grey,
+                      ),
                       items: _generos
                           .map(
                             (g) => DropdownMenuItem(value: g, child: Text(g)),
                           )
                           .toList(),
+                      selectedItemBuilder: (context) => _generos
+                          .map(
+                            (g) => Text(
+                              g,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          )
+                          .toList(),
                       onChanged: (v) => setState(() => _genero_literario = v),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: TextFormField(
                       controller: _ano_publicacaoController,
-                      decoration: const InputDecoration(labelText: 'Ano'),
+                      decoration: _inputDecoration('Ano'),
                       keyboardType: TextInputType.number,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              OutlinedButton.icon(
-                onPressed: _selecionarImagem,
-                icon: const Icon(
-                  Icons.image_outlined,
-                  color: AppColors.textPrimary,
-                ),
-                label: const Text(
-                  'Selecionar imagem de capa (PNG, JPG)',
-                  style: TextStyle(color: AppColors.textPrimary),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: _selecionarImagem,
+                  icon: const Icon(
+                    Icons.image_outlined,
+                    size: 18,
+                    color: Colors.grey,
+                  ),
+                  label: const Text(
+                    'Selecionar imagem de capa (PNG, JPG)',
+                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    side: const BorderSide(color: Color(0xFFDDDDDD)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
               if (_imagemSelecionada != null) ...[
@@ -464,15 +576,13 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
 
               // CAMPO DE RESUMO (apenas para usuários logados)
               if (widget.usuarioLogado) ...[
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
                 TextFormField(
                   maxLength: 700,
                   maxLines: 5,
                   initialValue: _resumo,
-                  decoration: const InputDecoration(
-                    labelText: 'Faça um Resumo sobre esse livro',
-                    alignLabelWithHint: true,
-                    border: OutlineInputBorder(),
+                  decoration: _inputDecoration(
+                    'Faça um resumo sobre esse livro',
                   ),
                   onChanged: (v) => setState(() => _resumo = v),
                 ),
@@ -510,7 +620,7 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
               ElevatedButton(
                 onPressed: _salvarLivro,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.secondary,
+                  backgroundColor: AppColors.teal,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 14,
