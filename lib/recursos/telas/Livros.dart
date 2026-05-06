@@ -311,29 +311,29 @@ class _LivrosState extends State<Livros> {
 
   // Método para mostrar notificação no meio da tela
   void _mostrarNotificacao(String mensagem, Color cor) {
-  // Remove qualquer SnackBar existente primeiro
-  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-  
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        mensagem,
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+    // Remove qualquer SnackBar existente primeiro
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          mensagem,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        backgroundColor: cor,
+        behavior: SnackBarBehavior.floating,
+        // Posicionamento no meio da tela
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).size.height * 0.4,
+          left: MediaQuery.of(context).size.width * 0.1,
+          right: MediaQuery.of(context).size.width * 0.1,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        duration: const Duration(seconds: 3),
       ),
-      backgroundColor: cor,
-      behavior: SnackBarBehavior.floating,
-      // Posicionamento no meio da tela
-      margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height * 0.4,
-        left: MediaQuery.of(context).size.width * 0.1,
-        right: MediaQuery.of(context).size.width * 0.1,
-      ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      duration: const Duration(seconds: 3),
-    ),
-  );
-}
+    );
+  }
 
   Future<void> _fazerLogin() async {
     try {
@@ -428,7 +428,7 @@ class _LivrosState extends State<Livros> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Buscar por título ou autor...',
-                prefixIcon: const Icon(Icons.search, color: AppColors.azul,),
+                prefixIcon: const Icon(Icons.search, color: AppColors.azul),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: Colors.grey[400]!),
@@ -628,7 +628,7 @@ class _LivrosState extends State<Livros> {
         child: const Icon(Icons.add, color: Colors.white),
       ),
 
-      bottomNavigationBar: Container(child: BannerAnuncio()),
+      //bottomNavigationBar: Container(child: BannerAnuncio()),
     );
   }
 
