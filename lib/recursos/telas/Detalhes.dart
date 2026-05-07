@@ -71,6 +71,7 @@ class _DetalhesState extends State<Detalhes> {
     'terror': 'lib/recursos/images/bat.png',
   };
 
+
   // Método para excluir livro do Shared Preferences
   Future<void> _excluirLivro() async {
     try {
@@ -381,7 +382,7 @@ Compartilhado via My Book List ❤️
                   Icon(
                     Icons.menu_book_outlined,
                     size: 18,
-                    color: AppColors.textPrimary,
+                    color: Colors.grey,
                   ),
                 ),
                 _infoCard(
@@ -389,7 +390,7 @@ Compartilhado via My Book List ❤️
                   Icon(
                     Icons.star_rounded,
                     size: 18,
-                    color: AppColors.textPrimary,
+                    color: Colors.grey,
                   ),
                 ),
                 _infoCard(
@@ -397,7 +398,7 @@ Compartilhado via My Book List ❤️
                   Icon(
                     _getStatusIcon(status),
                     size: 18,
-                    color: AppColors.textPrimary,
+                    color: Colors.grey,
                   ),
                 ),
               ],
@@ -417,7 +418,7 @@ Compartilhado via My Book List ❤️
                   Icon(
                     Icons.calendar_today,
                     size: 18,
-                    color: AppColors.textPrimary,
+                    color: Colors.grey,
                   ),
                 ),
               ],
@@ -453,7 +454,7 @@ Compartilhado via My Book List ❤️
                   Icon(
                     Icons.date_range,
                     size: 18,
-                    color: AppColors.textPrimary,
+                    color: Colors.grey,
                   ),
                 ),
                 _infoCard(
@@ -461,7 +462,7 @@ Compartilhado via My Book List ❤️
                   Icon(
                     Icons.event_available,
                     size: 18,
-                    color: AppColors.textPrimary,
+                    color: Colors.grey,
                   ),
                 ),
               ],
