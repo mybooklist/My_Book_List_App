@@ -616,25 +616,49 @@ class _AdicionarLivroState extends State<AdicionarLivro> {
                 ),
               ],
 
+            // botão Salvar e Cancelar
               const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _salvarLivro,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.azul,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 14,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 14,
+                      ),
+                      side: const BorderSide(color: AppColors.azul),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text(
+                      'Cancelar',
+                      style: TextStyle(color: AppColors.azul),
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: _salvarLivro,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.azul,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 14,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      widget.livroExistente != null
+                          ? 'Atualizar Livro'
+                          : 'Salvar Livro',
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
-                ),
-                child: Text(
-                  widget.livroExistente != null
-                      ? 'Atualizar Livro'
-                      : 'Salvar Livro',
-                  style: const TextStyle(color: Colors.white),
-                ),
+                ],
               ),
             ],
           ),
